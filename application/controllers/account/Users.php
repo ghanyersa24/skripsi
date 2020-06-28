@@ -7,7 +7,7 @@ class Users extends CI_Controller
 	public function get($id = null)
 	{
 		if (is_null($id)) {
-			$do = DB_MODEL::where($this->table, ['is_admin !=' => 'verifikator', 'is_admin !=' => 'admin']);
+			$do = DB_MODEL::all($this->table);
 		} else {
 			$do = DB_MODEL::find($this->table, array("id" => $id));
 		}
@@ -25,7 +25,7 @@ class Users extends CI_Controller
 			"id" => post('id', 'required')
 		);
 
-		$do = DB_MODEL::update($this->table, $where, array('status' => 'deactivated'));
+		$do = DB_MODEL::delete($this->table, $where);
 		if (!$do->error) {
 			success("data berhasil dihapus", $do->data);
 		} else {

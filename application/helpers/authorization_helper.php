@@ -6,7 +6,7 @@ class AUTHORIZATION
 	{
 		$CI = &get_instance();
 		$token = self::validateToken($token);
-		if ($token != false && (now() - $token->timestamp < ($CI->config->item('token_timeout') * 60))) {
+		if ($token != false && (date('Y-m-d H:i:s') - $token->timestamp < ($CI->config->item('token_timeout') * 60))) {
 			return $token;
 		}
 		return false;
@@ -21,7 +21,7 @@ class AUTHORIZATION
 	public static function generateToken($data)
 	{
 		$CI = &get_instance();
-		$data->timestamp = now();
+		$data->timestamp = date('Y-m-d H:i:s');
 		return JWT::encode($data, $CI->config->item('jwt_key'));
 	}
 

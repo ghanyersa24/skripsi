@@ -36,8 +36,8 @@
 				<p class="h3 mt-4 mb-4">SIMDA - Authentication</p>
 				<form name="form-login" id="form-login">
 					<div class="form-group">
-						<label class="form-label" for="username">Username</label>
-						<input id="username" class="form-control rounded-pill" type="text" name="username">
+						<label class="form-label" for="email">Email</label>
+						<input id="email" class="form-control rounded-pill" type="email" name="email">
 					</div>
 					<div class="form-group mt-n1">
 						<label class="form-label" for="password">Password</label>
@@ -53,8 +53,7 @@
 		</div>
 	</div>
 	<script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-	</script>
+
 	<script>
 		function bounce(height, delay = 0) {
 			$('#icon-login').delay(delay).animate({
@@ -69,23 +68,28 @@
 			await bounce(0)
 			await $.ajax({
 				type: "post",
-				url: api + 'account/auth',
+				url: '<?=base_url()?>' + 'account/login',
 				data: $('#form-login').serialize(),
 				success: function(response) {
+					$('#loader').delay(700).fadeOut();
 					if (!response.error) {
-						$('#loader').delay(700).fadeOut();
 						$("#icon-login").delay(700).fadeOut(1000, function() {
-							$("#name").text(response.data.nama)
+							$("#name").text(response.data.full_name)
 							$("#greating").fadeIn(2000, function() {
 								window.location.replace("<?= base_url("admin") ?>")
 							})
 						})
 					} else {
-						$('#loader').delay(700).fadeOut();
 						$('#card-login').delay(1450).slideDown(400);
 						bounce(-13, 1000);
 						$("#msg").text(response.message);
 					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					$('#loader').delay(700).fadeOut()
+					$('#card-login').delay(1450).slideDown(400)
+					bounce(-13, 1000)
+					$("#msg").text(`(${xhr.status}) ${thrownError}`)
 				}
 			})
 		});

@@ -7,16 +7,15 @@ class Admin extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-		// if (!$this->session->has_userdata('logged_in')) {
-		// 	redirect('login');
-		// }
-		// $user = DB_MODEL::find('users', ['id' => $this->session->userdata('id')]);
-		// if ($user->error) {
-		// 	$this->session->sess_destroy();
-		// 	redirect('login');
-		// }
-		// $this->session->set_userdata((array) $user->data);
-		// $this->load->helper('riset');
+		if (!$this->session->has_userdata('logged_in')) {
+			redirect('login');
+		}
+		$user = DB_MODEL::find('users', ['id' => $this->session->userdata('id')]);
+		if ($user->error) {
+			$this->session->sess_destroy();
+			redirect('login');
+		}
+		$this->session->set_userdata((array) $user->data);
 	}
 
 	public function index()

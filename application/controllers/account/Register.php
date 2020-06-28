@@ -5,16 +5,30 @@ class Register extends CI_Controller
 {
 	public function index()
 	{
-		$data = array(
-			"username" => post('username', 'required|min_char:12|unique:customer'),
-			"password" => password_hash(post('password', 'required'), PASSWORD_DEFAULT, array('cost' => 10)),
-		);
+		$data = [
+			'full_name' => post('full_name', 'required'),
+			'address' => post('address'),
+			'phone' => post('phone', 'required|numeric'),
+			'email' => post('email', 'required|email|unique:users'),
+			'password' => password_hash(post('password', 'required'), PASSWORD_DEFAULT, array('cost' => 10)),
+			'photo' => null
+		];
+
 		post('password_confirmation', 'same:password');
-		$do = DB_MODEL::insert('customer', $data);
+		$do = DB_MODEL::insert('users', $data);
+		foreach ($this->input->post('access') as $value) {
+			$access[] = [
+				'users_id' => $do->data['id'],
+				'role_id' => $value,
+				'created_at' => date('Y-m-d H:i:s')
+			];
+		}
+		
 		if (!$do->error) {
-			success("data berhasil ditambahkan", $do->data);
+			$do = DB_MODEL::insert_any('access', $access);
+			success('data berhasil ditambahkan', $do->data);
 		} else {
-			error("data gagal ditambahkan");
+			error('data gagal ditambahkan');
 		}
 	}
 }

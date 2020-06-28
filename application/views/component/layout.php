@@ -165,8 +165,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</div>
 					</li> -->
 					<li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-							<img alt="image" src="<?= $this->session->foto ?>" class="rounded-circle mr-1" style="object-fit:cover; object-position: center; width:30px; height:30px">
-							<div class="d-sm-none d-lg-inline-block">Hi, <?= $this->session->nama ?></div>
+							<img alt="profile" src="<?= $this->session->photo ?>" class="rounded-circle mr-1" style="object-fit:cover; object-position: center; width:30px; height:30px">
+							<div class="d-sm-none d-lg-inline-block">Hi, <?= $this->session->full_name ?></div>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<div class="dropdown-title">Logged in 5 min ago</div>

@@ -36,14 +36,45 @@ class UPLOAD_FILE
 	{
 		return self::uploads('rar|zip', $post_name, $location, $file_name, $max_size);
 	}
-	public static function delete($input_name)
+	public static function type($type, $name, $location, $file_name = null, $max_size = 20000)
 	{
-		$location_old = post($input_name);
+		if ($type == 'rar')
+			return self::rar($name, $location, $file_name, $max_size);
+
+		elseif ($type == 'pdf')
+			return self::pdf($name, $location, $file_name, $max_size);
+
+		elseif ($type == 'img')
+			return self::img($name, $location, $file_name, $max_size);
+
+		elseif ($type == 'word')
+			return self::word($name, $location, $file_name, $max_size);
+
+		elseif ($type == 'excel')
+			return self::excel($name, $location, $file_name, $max_size);
+
+		elseif ($type == 'ppt')
+			return self::ppt($name, $location, $file_name, $max_size);
+
+		elseif ($type == 'doc')
+			return self::rar($name, $location, $file_name, $max_size);
+		elseif ($type == 'all')
+			return self::uploads('rar|zip|pdf|doc|docx|xlx|xlsx|ppt|pptx|gif|jpg|png|JPG|jpeg', $name, $location, $file_name, $max_size);
+		else
+			error('method type file tidak sesuai ketentuan');
+	}
+	public static function delete($input_name, $is_link = false)
+	{
+		if (!$is_link)
+			$location_old = post($input_name);
+		else
+			$location_old = $input_name;
 		$location_old = str_replace('%2F', '/', $location_old);
 		$location_old = str_replace('%3A', ':', $location_old);
 		if ($location_old != "" && !is_null($location_old))
-			unlink(getcwd() . '\uploads' . str_replace(base_url('/uploads/'), '/', $location_old));
+			unlink(getcwd() . '/' . str_replace(base_url(), '/', $location_old));
 	}
+
 
 	public static function update($type, $post_name, $location = null,  $file_name = null, $max_size = 2048)
 	{
@@ -76,7 +107,7 @@ class UPLOAD_FILE
 
 		$upload_status = $CI->upload->do_upload($post_name);
 		$upload_message = strip_tags($CI->upload->display_errors());
-		$upload_location = base_url() . "uploads/$location/" . $CI->upload->data("file_name");
+		$upload_location = /*base_url() .*/ "uploads/$location/" . $CI->upload->data("file_name");
 		if ($upload_status)
 			return $upload_location;
 		else {
@@ -89,6 +120,7 @@ class UPLOAD_FILE
 					error($name . " hanya bisa menerima file dengan ukuran " . number_format($max_size / 1000) . ' MB');
 					break;
 				default:
+					error($upload_message);
 					error("File yang kamu kirim tidak sesuai dengan ketentuan.");
 					break;
 			}

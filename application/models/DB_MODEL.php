@@ -119,22 +119,6 @@ class DB_MODEL extends CI_Model
 		else
 			return false();
 	}
-
-	public static function login($table, $username)
-	{
-		$CI = &get_instance();
-		$query = $CI->db
-			->select('*')
-			->from($table)
-			->where("username =", $username)
-			->or_where("email =", $username)
-			->get();
-		if ($query) {
-			return true($query->row());
-		} else {
-			return false();
-		}
-	}
 }
 
 /* End of file db_model.php */

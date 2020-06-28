@@ -24,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 <script>
 	let logout = () => {
-		konfirmasi("keluar dari sistem Sistem Informasi Manajemen Dokumen Akreditasi (SIMDA).").then((willLogout) => {
+		confirm("keluar dari sistem Sistem Informasi Manajemen Dokumen Akreditasi (SIMDA).").then((willLogout) => {
 			if (willLogout)
 				window.location.replace('<?= base_url() . 'admin/logout' ?>')
 		})
