@@ -3,6 +3,10 @@ const requestGet = url => {
         type: "GET",
         url: url,
         async: false,
+        success: function(res) {
+            if (res.error)
+                swal('Gagal !', res.message, 'error')
+        },
         done: function(res) {
             return res
         },
@@ -31,6 +35,8 @@ const requestPost = (url, data, alert = true, image = false) => {
             success: function(res) {
                 if (alert)
                     message(res)
+                if (res.error)
+                    swal('Gagal !', res.message, 'error')
             },
             done: function(res) {
                 return res
@@ -48,6 +54,8 @@ const requestPost = (url, data, alert = true, image = false) => {
             success: function(res) {
                 if (alert)
                     message(res)
+                if (res.error)
+                    swal('Gagal !', res.message, 'error')
             },
             done: function(res) {
                 return res

@@ -173,6 +173,7 @@ function unique($params, $value, $table)
 
 function email($params, $value)
 {
+	$value = str_replace('%40', '@', $value);
 	$message = underline($params);
 	if (!filter_var($value, FILTER_VALIDATE_EMAIL))
 		error("$message tidak valid sebagai email");
@@ -182,9 +183,17 @@ function email($params, $value)
 function required($params, $value)
 {
 	$message = underline($params);
-	if (empty(post($params))) {
+	if (empty($value)) {
 		$params = underline($params);
 		error("data input $message tidak boleh kosong");
+	}
+	return $value;
+}
+
+function session($value)
+{
+	if (empty($value)) {
+		error("pastikan kamu sudah login ya.");
 	}
 	return $value;
 }
@@ -260,7 +269,6 @@ function true($data)
 function false()
 {
 	return (object) array(
-		"error" => true,
-		"data" => null
+		"error" => true
 	);
 }

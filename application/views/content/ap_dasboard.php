@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="main-content">
 	<section class="section">
 		<div class="section-header">
-			<h1>Dashboard</h1>
+			<h1><?= $title ?></h1>
 		</div>
 	</section>
 </div>

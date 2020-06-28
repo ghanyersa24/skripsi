@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Master extends CI_Controller
+class Competency extends CI_Controller
 {
-	protected $table = "table";
+	protected $table = "competency";
 	public function __construct()
 	{
 		parent::__construct();
@@ -23,14 +23,9 @@ class Master extends CI_Controller
 		}
 	}
 
-	public function get($id = null)
+	public function get($standar)
 	{
-		if (is_null($id)) {
-			$do = DB_MODEL::all($this->table);
-		} else {
-			$do = DB_MODEL::find($this->table, array("id" => $id));
-		}
-
+		$do = DB_MODEL::where($this->table, ['role_id' => $standar]);
 		if (!$do->error)
 			success("data " . $this->table . " berhasil ditemukan", $do->data);
 		else

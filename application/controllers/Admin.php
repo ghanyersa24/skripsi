@@ -3,19 +3,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Controller
 {
-
+	protected $access = [];
 	function __construct()
 	{
 		parent::__construct();
 		if (!$this->session->has_userdata('logged_in')) {
 			redirect('login');
 		}
-		$user = DB_MODEL::find('users', ['id' => $this->session->userdata('id')]);
-		if ($user->error) {
+		$do = DB_MODEL::join('access', 'role', null, 'right', ['access.users_id' => $this->session->userdata('id')], 'access.role_id , role.role');
+		if (count($do->data) < 1) {
 			$this->session->sess_destroy();
 			redirect('login');
 		}
-		$this->session->set_userdata((array) $user->data);
+		$this->access = $do->data;
+		$this->session->set_userdata(['access' => (array) $do->data]);
 	}
 
 	public function index()
@@ -25,6 +26,39 @@ class Admin extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
+	public function akreditasi($standar, $competency = null)
+	{
+		$standar = str_replace('standar-', '', $standar);
+		$find = false;
+		foreach ($this->access as $key => $value) {
+			if ($value->role_id ==  $standar)
+				$find = true;
+		}
+		if ($find) {
+			$data['title'] = 'Detail Standar ' . $standar;
+			$data['content'] = 'ap_competency';
+			$data['standar'] = $standar;
+			if (!is_null($competency))
+				$this->competency($standar, $competency);
+			else
+				$this->load->view('template', $data);
+		} else
+			redirect('admin');
+	}
+
+	private function competency($standar, $competency)
+	{
+		$kompetensi = str_replace('kompetensi-', '', $competency);
+		$do = DB_MODEL::find('competency', ['role_id' => $standar, 'id' => $kompetensi]);
+		if (!$do->error) {
+			$data['title'] = "Detail Kompetensi $kompetensi";
+			$data['content'] = 'ap_detail';
+			$data['standar'] = $standar;
+			$this->load->view('template', $data);
+		} else
+			redirect('admin/akreditasi/standar-' . $standar);
+	}
+
 	public function profile()
 	{
 		$data['title'] = 'My Profile';
@@ -32,17 +66,17 @@ class Admin extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function myproduct()
+	public function mapel()
 	{
-		$data['title'] = 'My List Product';
-		$data['content'] = 'ap_myproduct';
+		$data['title'] = 'Mata Pelajaran';
+		$data['content'] = 'ap_mapel';
 		$this->load->view('template', $data);
 	}
 
-	public function detail()
+	public function teacher()
 	{
-		$data['title'] = 'Roadmap Produk ';
-		$data['content'] = 'ap_detail';
+		$data['title'] = 'Tenaga Pengajar';
+		$data['content'] = 'ap_teacher';
 		$this->load->view('template', $data);
 	}
 
@@ -50,13 +84,6 @@ class Admin extends CI_Controller
 	{
 		$data['title'] = 'Halaman Management User';
 		$data['content'] = 'users/ap_users';
-		$this->load->view('template', $data);
-	}
-
-	public function tambahan($slug)
-	{
-		$data['title'] = 'Data Tambahan ';
-		$data['content'] = 'ap_tambahan';
 		$this->load->view('template', $data);
 	}
 

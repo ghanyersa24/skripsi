@@ -5,84 +5,58 @@
       		<div class="section-header d-block justify-content-start align-items-center">
       			<h1 class="pt-2 pb-2 mt-0 ml-3"><?= $title ?></h1>
       		</div>
-      		<div class="section-body">
-      			<div class="row mt-sm-4">
-      				<div class="col-12 col-md-12 col-lg-5">
-      					<div class="card text-center">
-      						<div class="my-3">
-      							<img class="rounded" style="height: 250px; width: 250px; object-fit:cover" src="<?= $this->session->userdata('foto'); ?>" alt="gambar profil">
+      		<form id="form-view" name="form-view" method="post">
+      			<div class="section-body">
+      				<div class="row mt-sm-4">
+      					<div class="col-12 col-md-12 col-lg-5">
+      						<div class="card text-center">
+      							<div class="my-3">
+      								<img class="rounded" style="height: 250px; width: 250px; object-fit:cover" src="<?= $this->session->userdata('foto') == '' ? 'https://vignette.wikia.nocookie.net/kdramas/images/a/a2/Ba8834c165874ef091d90cc567909c9c.png/revision/latest/top-crop/width/720/height/900?cb=20190803070125' : $this->session->userdata('foto'); ?>" alt="gambar profil">
+      							</div>
+      							<div class="">
+      								<label for="view-full_name">Nama Lengkap</label>
+      								<input name="full_name" id="view-full_name" class="bg-light form-control text-center" type="text" value="<?= $this->session->userdata('full_name'); ?>">
+      							</div>
       						</div>
-      						<p class="h5 text-capitalize" id="name"><?= $this->session->userdata('nama'); ?></p>
-      						<p class="h5 text-capitalize" id="fakultas"><?= $this->session->userdata('fakultas'); ?></p>
-      						<span class="bg-light mt-2 py-3 rounded-top text-center"> Sistem Informasi Manajemen Dokumen Akreditasi (SIMDA)</span>
       					</div>
-      				</div>
-      				<div class="col-12 col-md-12 col-lg-7">
-      					<div class="card">
-      						<form id="form-view" name="form-view" method="post">
+      					<div class="col-12 col-md-12 col-lg-7">
+      						<div class="card">
       							<div class="card-header">
       								<h4>Edit Profile</h4>
       							</div>
       							<div class="card-body">
 
+
+
       								<div class="form-group">
-      									<label for="view-tanggal_lahir">Tanggal Lahir </label>
-      									<input name="tanggal_lahir" id="view-tanggal_lahir" class="form-control datepicker" type="text" value="<?= $this->session->userdata('tanggal_lahir'); ?>">
+      									<label for="view-phone">Phone</label>
+      									<input name="phone" id="view-phone" class="form-control" type="number" value="<?= $this->session->userdata('phone'); ?>">
       								</div>
-      								<div class=" form-group">
-      									<label for="view-contact">Kontak</label>
-      									<input type="number" class="form-control" id="view-kontak" name="kontak" value="<?= $this->session->userdata('kontak'); ?>">
-      								</div>
+
       								<div class="form-group">
-      									<label for="view-name">Email</label>
-      									<input type="email" class="form-control" id="view-email" name="email" value="<?= $this->session->userdata('email'); ?>">
+      									<label for="view-email">Email</label>
+      									<input name="email" id="view-full_name" class="form-control" type="email" value="<?= $this->session->userdata('email'); ?>">
       								</div>
-      								<!-- <div class="form-group">
-      									<label for="view-pendidikan_terakhir">Pendidikan Terakhir</label>
-      									<select class="custom-select" name="pendidikan_terakhir" value="D1">
-      										<option value="SMA/Sederajat">SMA/Sederajat</option>
-      										<option value="D1">D1</option>
-      										<option value="D2">D2</option>
-      										<option value="D3">D3</option>
-      										<option value="S1">S1</option>
-      										<option value="S2">S2</option>
-      										<option value="S3">S3</option>
-      									</select>
-      								</div> -->
+
+      								<div class="form-group">
+      									<label for="view-address">Alamat</label>
+      									<textarea name="address" id="view-address" class="form-control"><?= $this->session->userdata('address'); ?></textarea>
+      								</div>
       							</div>
       							<div class="card-footer text-right">
       								<button class="btn btn-primary" id="btn-save" type="submit">Simpan Perubahan</button>
       							</div>
-      						</form>
+      						</div>
       					</div>
       				</div>
       			</div>
-      		</div>
+      		</form>
       	</section>
       </div>
       <script>
-      	$('#form-view').validate({
-      		rules: {
-      			tanggal_lahir: {
-      				required: true,
-      			},
-      			kontak: {
-      				required: true,
-      			},
-      			email: {
-      				required: true
-      			},
-      		},
-      		submitHandler: function(form) {
-      			$.ajax({
-      				type: "POST",
-      				url: api + 'account/update',
-      				data: $('#form-view').serialize(),
-      				dataType: "json",
-      				success: function(response) {
-      					response_alert(response)
-      				}
-      			});
-      		}
-      	})
+      	$('#form-view').submit(function(e) {
+      		e.preventDefault();
+      		let data = $('#form-view').serialize()
+      		const req = requestPost(base_url + 'account/update', data)
+      	});
       </script>

@@ -49,7 +49,7 @@ class DB_MODEL extends CI_Model
 	public static function insert($table, $data)
 	{
 		$CI = &get_instance();
-		$CI->session->has_userdata('id') ? $data['created_by'] = $CI->session->userdata('id') : $data['created_by'] = 'guest';
+		$data['created_at'] = date('Y-m-d H:i:s');
 		$query = $CI->db->insert($table, $data);
 		if ($query) {
 			$id = $CI->db->insert_id();
@@ -73,8 +73,6 @@ class DB_MODEL extends CI_Model
 	public static function update($table, $where, $data)
 	{
 		$CI = &get_instance();
-		$data['updated_by'] = $CI->session->userdata('id');
-		$data['updated_at'] = date('Y-m-d H:i:s');
 		$CI->db->where($where)->update($table, $data);
 		if (is_array($where))
 			return true(array_merge($where, $data));
@@ -85,8 +83,6 @@ class DB_MODEL extends CI_Model
 	public static function update_straight($table, $where, $data)
 	{
 		$CI = &get_instance();
-		$data['updated_by'] = $CI->session->userdata('id');
-		$data['updated_at'] = date('Y-m-d H:i:s');
 		$query = $CI->db->where($where)->update($table, $data);
 		if ($CI->db->affected_rows() !== 0)
 			if (is_array($where))
@@ -121,5 +117,5 @@ class DB_MODEL extends CI_Model
 	}
 }
 
-/* End of file db_model.php */
-/* Location: ./application/models/db_model.php */
+/* End of file DB_MODEL.php */
+/* Location: ./application/models/DB_MODEL.php */

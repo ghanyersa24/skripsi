@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Master extends CI_Controller
+class Teacher extends CI_Controller
 {
-	protected $table = "table";
+	protected $table = "teacher";
 	public function __construct()
 	{
 		parent::__construct();
@@ -12,7 +12,13 @@ class Master extends CI_Controller
 	public function create()
 	{
 		$data = array(
-			"column" => post('column'),
+			"mapel_id" => post('mapel_id', 'required|numeric'),
+			"nip" => post('nip'),
+			"teacher_name" => post('teacher_name', 'required'),
+			"address" => post('address'),
+			"phone" => post('phone', 'required|numeric'),
+			"email" => post('email', 'email'),
+			"last_ed" => post('last_ed', 'enum:SMA/MA&D1&D2&D3&S1/D4&S2&S3'),
 		);
 
 		$do = DB_MODEL::insert($this->table, $data);
@@ -26,7 +32,7 @@ class Master extends CI_Controller
 	public function get($id = null)
 	{
 		if (is_null($id)) {
-			$do = DB_MODEL::all($this->table);
+			$do = DB_MODEL::join($this->table, 'mapel');
 		} else {
 			$do = DB_MODEL::find($this->table, array("id" => $id));
 		}
@@ -40,7 +46,13 @@ class Master extends CI_Controller
 	public function update()
 	{
 		$data = array(
-			"column" => post('column'),
+			"mapel_id" => post('mapel_id', 'required|numeric'),
+			"nip" => post('nip'),
+			"teacher_name" => post('teacher_name', 'required'),
+			"address" => post('address'),
+			"phone" => post('phone', 'required|numeric'),
+			"email" => post('email', 'email'),
+			"last_ed" => post('last_ed', 'enum:SMA/MA&D1&D2&D3&S1/D4&S2&S3'),
 		);
 
 		$where = array(

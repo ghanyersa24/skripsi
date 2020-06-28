@@ -9,10 +9,13 @@ class Users extends CI_Controller
 		if (is_null($id)) {
 			$do = DB_MODEL::all($this->table);
 		} else {
+			$single = true;
 			$do = DB_MODEL::find($this->table, array("id" => $id));
 		}
 
 		if (!$do->error) {
+			if (isset($single))
+				$do->data->access = DB_MODEL::where('access', ['users_id' => $id])->data;
 			success("data berhasil ditemukan", $do->data);
 		} else {
 			error("data gagal ditemukan");

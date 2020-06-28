@@ -8,13 +8,15 @@ class Update extends CI_Controller
 		$where = array(
 			"id" =>  $this->session->userdata('id'),
 		);
-		$data = array(
-			"email" => post('email', 'required'),
-			"kontak" => post('kontak', 'required|min_char:12|numeric'),
-			"tanggal_lahir" => post('tanggal_lahir', 'date_valid'),
-		);
+		$data = [
+			'full_name' => post('full_name', 'required'),
+			'address' => post('address'),
+			'phone' => post('phone', 'required|numeric'),
+			'email' => post('email', 'required|email'),
+		];
 		$do = DB_MODEL::update('users', $where, $data);
 		if (!$do->error) {
+			$this->session->set_userdata($data);
 			success("data berhasil diubah", $do->data);
 		} else {
 			error("data gagal diubah");

@@ -35,7 +35,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Tambah Admin</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				<h5 class="modal-title" id="exampleModalLabel">Tambah <?= $title ?></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
 			</div>
 			<form id="form-add" class="form-add">
 				<div class="modal-body" id="form-data">
@@ -81,7 +81,53 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Batal</button>
-					<button class="btn btn-primary" id="btn-save" type="submit">Tambah</button>
+					<button class="btn btn-primary" id="btn-add" type="submit">Tambah</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div id="view" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Ubah <?= $title ?></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+			</div>
+			<form id="form-view" class="form-view">
+				<div class="modal-body" id="form-data">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="view-full_name">Nama Lengkap</label>
+								<input id="view-full_name" class="form-control" type="text" name="full_name" required>
+							</div>
+							<div class="form-group">
+								<label for="view-access">Hak Akses</label>
+								<div class="row container" id="view-access">
+								</div>
+							</div>
+						</div>
+						<div class=" col-md-8">
+							<div class="form-group">
+								<label for="view-phone">Kontak</label>
+								<input id="view-phone" class="form-control" type="number" name="phone">
+							</div>
+							<div class="form-group ">
+								<label for="view-email">Email</label>
+								<input id="view-email" class="form-control" type="email" name="email">
+							</div>
+							<div class="form-group">
+								<label for="view-address">Alamat</label>
+								<textarea id="view-address" class="form-control" name="address" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Batal</button>
+					<button class="btn btn-primary" id="btn-save" type="submit">Simpan</button>
 				</div>
 			</form>
 		</div>
@@ -90,23 +136,23 @@
 
 <script>
 	$(document).ready(function() {
-		const users = requestGet(api + 'role/get')
-		access(users.data)
+		const role = requestGet(api + 'role/get')
+		access(role.data)
 
 		$('#table').DataTable({
-			"ajax": base_url + 'account/users/get',
-			"columns": [{
-					"render": function(data, type, row, meta) {
+			ajax: base_url + 'account/users/get',
+			columns: [{
+					render: function(data, type, row, meta) {
 						return meta.row + meta.settings._iDisplayStart + 1;
 					},
 					className: "text-center"
 				}, {
-					"data": "full_name"
+					data: "full_name"
 				}, {
-					"data": "phone"
+					data: "phone"
 				},
 				{
-					"render": function(data, type, JsonResultRow, meta) {
+					render: function(data, type, JsonResultRow, meta) {
 						return `<button class="btn btn-light btn-delete mr-1"><i class="fas fa-trash"></i></button>
 						<button class="btn btn-primary btn-view"><i class="fa fa-eye"></i> Detail </button>`
 					}
@@ -114,8 +160,24 @@
 			]
 		})
 
+
+		$('#table tbody').on('click', '.btn-view', function() {
+			let data = $(`#table`).DataTable().row($(this).parents('tr')).data()
+			const user = requestGet(base_url + 'account/users/get/' + data.id)
+			for (key in user.data) {
+				$(`#view-${key}`).val(data[key])
+			}
+			role.data.forEach(element => {
+				user.data.access.forEach(data => {
+					if (element.id == data.role_id)
+						$(`#form-view #vc-${element.id}`).prop('checked', true);
+				});
+			});
+			$('#view').modal('show')
+		})
+
 		$(`#table tbody`).on('click', '.btn-delete', function() {
-			var data = $(`#table`).DataTable().row($(this).parents('tr')).data()
+			let data = $(`#table`).DataTable().row($(this).parents('tr')).data()
 			confirm(`Apakah yakin untuk menghapus ${data.full_name} sebagai pengguna?`).then((isDelete) => {
 				if (isDelete) {
 					const res = requestPost(base_url + 'account/users/delete', {
@@ -141,10 +203,12 @@
 	})
 
 	const access = (users) => {
-		let checkbox = ""
+		let checkbox = checkboxView = ""
 		users.forEach(element => {
-			checkbox += `<div class="custom-control custom-checkbox col-6"><input type="checkbox" class="custom-control-input" name="access[]" id="${element.id}" value="${element.id}"><label class="custom-control-label" for="${element.id}"> ${element.role}</label></div>`;
+			checkbox += `<div class="custom-control custom-checkbox col-6"><input type="checkbox" class="custom-control-input" name="access[]" id="ac-${element.id}" value="${element.id}"><label class="custom-control-label" for="ac-${element.id}"> ${element.role}</label></div>`;
+			checkboxView += `<div class="custom-control custom-checkbox col-6"><input type="checkbox" class="custom-control-input" name="access[]" id="vc-${element.id}" value="${element.id}"><label class="custom-control-label" for="vc-${element.id}"> ${element.role}</label></div>`;
 		})
 		$('#add-access').append(checkbox)
+		$('#view-access').append(checkboxView)
 	}
 </script>

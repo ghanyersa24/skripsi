@@ -23,7 +23,7 @@ class Register extends CI_Controller
 				'created_at' => date('Y-m-d H:i:s')
 			];
 		}
-		
+
 		if (!$do->error) {
 			$do = DB_MODEL::insert_any('access', $access);
 			success('data berhasil ditambahkan', $do->data);
