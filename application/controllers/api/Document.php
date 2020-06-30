@@ -1,31 +1,23 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Record extends CI_Controller
+class Document extends CI_Controller
 {
-	protected $table = "competancy";
+	protected $table = "document";
 	public function __construct()
 	{
 		parent::__construct();
 		// additional library
 	}
-	public function create()
-	{
-		$data = array(
-			"column" => post('column'),
-		);
 
-		$do = DB_MODEL::insert($this->table, $data);
-		if (!$do->error) {
-			success("data " . $this->table . " berhasil ditambahkan", $do->data);
+	public function get($id = null)
+	{
+		if (is_null($id)) {
+			$do = DB_MODEL::all($this->table);
 		} else {
-			error("data " . $this->table . " gagal ditambahkan");
+			$do = DB_MODEL::find($this->table, array("id" => $id));
 		}
-	}
 
-	public function get($kompetensi)
-	{
-		$do = DB_CUSTOM::documentTeacher($kompetensi);
 		if (!$do->error)
 			success("data " . $this->table . " berhasil ditemukan", $do->data);
 		else

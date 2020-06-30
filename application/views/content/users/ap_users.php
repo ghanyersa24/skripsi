@@ -178,7 +178,7 @@
 
 		$(`#table tbody`).on('click', '.btn-delete', function() {
 			let data = $(`#table`).DataTable().row($(this).parents('tr')).data()
-			confirm(`Apakah yakin untuk menghapus ${data.full_name} sebagai pengguna?`).then((isDelete) => {
+			konfirm(`Apakah yakin untuk menghapus ${data.full_name} sebagai pengguna?`).then((isDelete) => {
 				if (isDelete) {
 					const res = requestPost(base_url + 'account/users/delete', {
 						id: data.id

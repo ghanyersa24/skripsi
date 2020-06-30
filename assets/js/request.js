@@ -66,7 +66,7 @@ const requestPost = (url, data, alert = true, image = false) => {
         }).responseJSON
 }
 
-function confirm(message) {
+function konfirm(message) {
     return swal({
         title: "Apakah Kamu yakin?",
         text: message,

@@ -31,7 +31,7 @@
 			<div style="display: none" id="greating" class="alert alert-success alert-dismissible fade show" role="alert">
 				<strong>Hi, <span id="name"></span> !</strong> Selamat Datang di <strong>Sistem Informasi Manajemen Dokumen Akreditasi (SIMDA)</strong>, Sistem Informasi Manajemen Inovasi Universitas Brawijaya.
 			</div>
-			<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Logo_Universitas_Brawijaya.svg/1200px-Logo_Universitas_Brawijaya.svg.png" alt="" id="icon-login" class="p-2 bg-white rounded-circle login-icon position-icon" />
+			<img src="<?=base_url().'assets/img/logo-sekolah.jpg'?>" alt="" id="icon-login" class="p-2 bg-white rounded-circle login-icon position-icon" />
 			<div class="shadow bg-white p-5 login-form m-3" id="card-login">
 				<p class="h3 mt-4 mb-4">SIMDA - Authentication</p>
 				<form name="form-login" id="form-login">

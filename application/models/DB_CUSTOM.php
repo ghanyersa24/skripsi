@@ -30,7 +30,10 @@ class DB_CUSTOM extends CI_Model
         INNER JOIN `mapel` ON `teacher`.`mapel_id` = `mapel`.`id`
     ) AS `teacher`
     ON
-		`document`.`reference` = `teacher`.`teacher_id`")->result();
-		success("",$query);
+		`document`.`reference` = `teacher`.`teacher_id`");
+		if ($query)
+			return true($query->result());
+		else
+			return false();
 	}
 }

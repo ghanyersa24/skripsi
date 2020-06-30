@@ -189,7 +189,7 @@
 
 		$(`#table tbody`).on('click', '.btn-delete', function() {
 			var data = $(`#table`).DataTable().row($(this).parents('tr')).data()
-			confirm(`Apakah yakin untuk menghapus ${data.mapel} ?`).then((isDelete) => {
+			konfirm(`Apakah yakin untuk menghapus ${data.mapel} ?`).then((isDelete) => {
 				if (isDelete) {
 					const res = requestPost(api + 'teacher/delete', {
 						id: data.id

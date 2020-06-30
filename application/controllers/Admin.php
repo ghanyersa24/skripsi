@@ -54,6 +54,7 @@ class Admin extends CI_Controller
 			$data['title'] = "Detail Kompetensi $kompetensi";
 			$data['content'] = 'ap_detail';
 			$data['standar'] = $standar;
+			$data['competency'] = $kompetensi;
 			$this->load->view('template', $data);
 		} else
 			redirect('admin/akreditasi/standar-' . $standar);
