@@ -23,8 +23,8 @@ const message = (res) => {
         swal('Gagal !', res.message, 'error')
 }
 
-const requestPost = (url, data, alert = true, image = false) => {
-    if (image)
+const requestPost = (url, data, file = false, alert = true) => {
+    if (file)
         return $.ajax({
             type: "POST",
             url: url,
@@ -64,6 +64,34 @@ const requestPost = (url, data, alert = true, image = false) => {
                 swal('Gagal !', `(${xhr.status}) ${thrownError}`, 'error')
             }
         }).responseJSON
+}
+
+const googleDrive = (url, data) => {
+    return $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        // async: false,
+        processData: false,
+        contentType: false,
+        success: function(res) {
+            if (!res.error)
+                swal('Berhasil !', res.message, 'success')
+            else if (res.error && res.message == 'silahkan melakukan autentikasi google drive')
+                konfirm('menggunggah file ke google drive perlu autentikasi google.').then((yes) => {
+                    if (yes)
+                        window.open(res.data.url)
+                })
+            else
+                swal('Gagal !', res.message, 'error')
+        },
+        done: function(res) {
+            return res
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            swal('Gagal !', `(${xhr.status}) ${thrownError}`, 'error')
+        }
+    }).responseJSON
 }
 
 function konfirm(message) {

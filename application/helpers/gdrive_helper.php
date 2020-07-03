@@ -177,15 +177,19 @@ class GDRIVE
 		}
 	}
 
-	public static function upload($type, $name, $file_name = null)
+	public static function upload($type, $name, $file_name = null, $folderName = null)
 	{
 		self::pre();
-		$redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+		$redirect_uri = current_url();
 		$client = new Google_Client();
 		$client->setAuthConfig(self::$oauth_credentials);
 		$client->setRedirectUri($redirect_uri);
 		$client->addScope("https://www.googleapis.com/auth/drive");
 		$service = new Google_Service_Drive($client);
+		$optParams = array(
+			'pageSize' => 999,
+			'fields' => 'nextPageToken, files',
+		);
 		// add "?logout" to the URL to remove a token from the session
 		// if (isset($_REQUEST['logout'])) {
 		// 	unset($_SESSION['upload_token']);
@@ -198,75 +202,111 @@ class GDRIVE
 		 * function. We store the resultant access token
 		 * bundle in the session, and redirect to ourself.
 		 ************************************************/
-		if (isset($_GET['code'])) {
-			$token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+		if (isset($_SESSION['code'])) {
+			$token = $client->fetchAccessTokenWithAuthCode($_SESSION['code']);
 			// $token = file_get_contents(__DIR__ . '../../../g/access-token.json');
 			$client->setAccessToken($token);
 			// store in the session also
 			$_SESSION['upload_token'] = $token;
+			unset($_SESSION['code']);
 
 			// redirect back to the example
-			header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+			// header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 		}
 
 		if (!empty($_SESSION['upload_token'])) {
-			$client->setAccessToken($_SESSION['upload_token']);
-			// if ($client->isAccessTokenExpired()) {
-			// 	unset($_SESSION['upload_token']);
-			// }
+			$client->setAccessToken($_SESSION['upload_token'], true);
+			if ($client->isAccessTokenExpired()) {
+				unset($_SESSION['upload_token']);
+				// $refreshTokenSaved = $client->getRefreshToken();
+				// $client->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
+				// $updatedAccessToken = $client->getAccessToken();
+				// $updatedAccessToken['refresh_token'] = $refreshTokenSaved;
+				// $client->setAccessToken($updatedAccessToken);
+			}
 		} else {
 			$authUrl = $client->createAuthUrl();
+			error("silahkan melakukan autentikasi google drive", ['url' => $authUrl]);
 		}
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $client->getAccessToken()) {
+
+
 			$loc = UPLOAD_FILE::type($type, $name, 'gdrive', $file_name);
 			DEFINE("TESTFILE", $loc);
+			$name = str_replace('uploads/gdrive/', '', $loc);
+			$folderId = null;
+			if ($folderName !== null) {
+				$results = $service->files->listFiles($optParams);
+				$having = false;
+				foreach ($results->files as $data) {
+					if ($data->name == $folderName && $data->trashed == false) {
+						$folderId = $data->id;
+						$having = true;
+						break;
+					}
+				}
+				if (!$having) {
+					$fileMeta = new Google_Service_Drive_DriveFile();
+					$fileMeta->name = $folderName;
+					$fileMeta->mimeType = 'application/vnd.google-apps.folder';
+					$object = new StdClass;
+					$folder = $service->files->create($fileMeta, (array) $object->fields = 'id');
+					$folderId = $folder->id;
+				}
+			}
 			$file = new Google_Service_Drive_DriveFile();
-			$file->name = str_replace('uploads/gdrive/', '', $loc);
-			$chunkSizeBytes = 1 * 1024 * 1024;
+			$file->name = $name;
+			$file->parents = (array) $folderId;
+			$result = $service->files->create($file, [
+				'data' => file_get_contents(base_url() . $loc),
+				'mimeType' => 'application/octet-stream',
+				'uploadType' => 'media'
+			]);
+			// $chunkSizeBytes = 1 * 1024 * 1024;
 
 			// Call the API with the media upload, defer so it doesn't immediately return.
-			$client->setDefer(true);
-			$request = $service->files->create($file);
+			// $client->setDefer(true);
 
-			// Create a media file upload to represent our upload process.
-			$media = new Google_Http_MediaFileUpload(
-				$client,
-				$request,
-				'multipart/media',
-				null,
-				true,
-				$chunkSizeBytes
-			);
-			$media->setFileSize(filesize(TESTFILE));
+			// // Create a media file upload to represent our upload process.
+			// $media = new Google_Http_MediaFileUpload(
+			// 	$client,
+			// 	$request,
+			// 	'multipart/media',
+			// 	null,
+			// 	true,
+			// 	$chunkSizeBytes
+			// );
+			// $media->setFileSize(filesize(TESTFILE));
 
-			// Upload the various chunks. $status will be false until the process is
-			// complete.
-			$status = false;
-			$handle = fopen(TESTFILE, "rb");
-			while (!$status && !feof($handle)) {
-				// read until you get $chunkSizeBytes from TESTFILE
-				// fread will never return more than 8192 bytes if the stream is read buffered and it does not represent a plain file
-				// An example of a read buffered file is when reading from a URL
-				$chunk = self::readVideoChunk($handle, $chunkSizeBytes);
-				$status = $media->nextChunk($chunk);
-			}
+			// // Upload the various chunks. $status will be false until the process is
+			// // complete.
+			// $status = false;
+			// $handle = fopen(TESTFILE, "rb");
+			// while (!$status && !feof($handle)) {
+			// 	// read until you get $chunkSizeBytes from TESTFILE
+			// 	// fread will never return more than 8192 bytes if the stream is read buffered and it does not represent a plain file
+			// 	// An example of a read buffered file is when reading from a URL
+			// 	$chunk = self::readVideoChunk($handle, $chunkSizeBytes);
+			// 	$status = $media->nextChunk($chunk);
+			// }
 
 			// The final value of $status will be the data from the API for the object
 			// that has been uploaded.
 			UPLOAD_FILE::delete($loc, true);
-			$result = false;
-			if ($status != false) {
-				$result = $status;
-				return $result;
-			} else
-				error('error saat upload');
+			$id = $result->id;
+			return "https://drive.google.com/open?id=$id";
+			// $result = false;
+			// if ($status != false) {
+			// 	$result = $status;
+			// 	return $result;
+			// } else
+			// 	error('error saat upload');
 
-			fclose($handle);
+			// fclose($handle);
 		} else {
-			error("silahkan melakukan autentikasi google drive", ['url' => $authUrl]);
+			error("Terjadi masalah ketika melakukan upload file ke google drive");
 		}
 	}
-
 	private static function readVideoChunk($handle, $chunkSize)
 	{
 		$byteCount = 0;

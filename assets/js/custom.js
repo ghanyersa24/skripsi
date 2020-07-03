@@ -29,47 +29,6 @@ $(document).ready(function() {
     });
 })
 
-let editorList = [];
-
-function editor(id) {
-    return ClassicEditor.create(document.getElementById(id), {
-        removePlugins: ['Heading', 'Link'],
-        toolbar: ['bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
-    }).then(editor => {
-        let key = '#' + id
-        editorList.push({
-            id,
-            editor
-        })
-    }).catch(error => {
-        console.error(error)
-    })
-}
-
-function setEditor(id, data) {
-    const index = getEditorIndex(id);
-    editorList[index].editor.setData(data)
-}
-
-function getEditorIndex(key) {
-    const dataIndex = editorList.findIndex((data) => data.id === key);
-    return dataIndex;
-}
-
-function triggerEditor(id) {
-    let editorId = $(id + ' textarea');
-    for (let index = 0; index < editorId.length; index++) {
-        editor(editorId[index].id)
-    }
-}
-
-function triggerSetEditor(id, data) {
-    let editorId = $(id + ' textarea');
-    for (let index = 0; index < editorId.length; index++) {
-        setEditor(editorId[index].id, data)
-    }
-}
-
 function formatRupiah(angka, prefix) {
     var number_string = angka.replace(/[^,\d]/g, '').toString(),
         split = number_string.split(','),

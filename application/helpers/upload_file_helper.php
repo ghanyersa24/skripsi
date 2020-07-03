@@ -95,7 +95,7 @@ class UPLOAD_FILE
 			$config['upload_path'] = "./uploads/untitles";
 		}
 		if (!is_null($file_name))
-			$config['file_name'] = $file_name . '_' . date('Y-m-d H i');
+			$config['file_name'] = $file_name;
 		else
 			$config['encrypt_name'] = true;
 

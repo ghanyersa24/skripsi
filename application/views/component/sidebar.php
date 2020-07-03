@@ -22,7 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					$access = str_replace('standar-', '', $this->uri->segment(3));
 					foreach ($this->session->access as $value) {
 					?>
-						<li class="<?= $access == $value->role_id ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url() . 'admin/akreditasi/standar-' . $value->role_id . '/' . $value->role ?>">Standar <?= $value->role_id ?></a></li>
+						<li class="<?= $access == $value->role_id ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url() . 'admin/akreditasi/'   . $value->role . '~' . $value->role_id ?>"><?= word_limiter($value->role, 2) ?></a></li>
 					<?php
 					}
 					?>

@@ -7,17 +7,33 @@ class Document extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		// additional library
+		$this->load->helper('gdrive');
 	}
 
-	public function get($id = null)
+	public function create()
 	{
-		if (is_null($id)) {
-			$do = DB_MODEL::all($this->table);
+		$code = $this->input->get('code');
+		if ($code == null) {
+			$data = array(
+				"competency_id" => post('competency_id', 'required|numeric'),
+				"title" => $title = post('judul', 'required'),
+				"location" => post('location'),
+				"year" => post('year', 'numeric'),
+				"link" => GDRIVE::upload('all', 'gdrive', $title, post('folderName', 'required')),
+			);
+			$do = DB_MODEL::insert($this->table, $data);
+			if (!$do->error)
+				success("data " . $this->table . " berhasil ditambahkan", $do->data);
+			else
+				error("data " . $this->table . " gagal ditambahkan");
 		} else {
-			$do = DB_MODEL::find($this->table, array("id" => $id));
+			$this->session->set_userdata('code', $code);
+			echo "<script>window.close()</script>";
 		}
-
+	}
+	public function get($id)
+	{
+		$do = DB_MODEL::join($this->table, 'competency', null, null, ['competency_id' => $id]);
 		if (!$do->error)
 			success("data " . $this->table . " berhasil ditemukan", $do->data);
 		else

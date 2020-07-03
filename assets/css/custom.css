@@ -329,9 +329,17 @@ body h1 {
     }
 }
 
-#kompetensi .card:hover {
+.delete:hover {
+    color: red;
+}
+
+.edit:hover {
+    color: #dd8e1f;
+}
+
+.up>div:hover {
     transition: 0.4s;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
 }
 
 .click:hover {

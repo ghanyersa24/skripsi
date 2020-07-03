@@ -103,6 +103,16 @@ class DB_MODEL extends CI_Model
 			return false();
 	}
 
+	public static function clean($table, $where)
+	{
+		$CI = &get_instance();
+		$query = $CI->db->where($where)->delete($table);
+		if ($query)
+			return true($query);
+		else
+			return false();
+	}
+
 	public static function join($table_join, $to_table,  $on = null, $type = 'inner', $where = [], $select = '*')
 	{
 		$CI = &get_instance();

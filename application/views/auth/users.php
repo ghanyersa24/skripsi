@@ -36,8 +36,8 @@
 				<p class="h3 mt-4 mb-4">SIMDA - Authentication</p>
 				<form name="form-login" id="form-login">
 					<div class="form-group">
-						<label class="form-label" for="email">Email</label>
-						<input id="email" class="form-control rounded-pill" type="email" name="email">
+						<label class="form-label" for="username">Username</label>
+						<input id="username" class="form-control rounded-pill" type="text" name="username">
 					</div>
 					<div class="form-group mt-n1">
 						<label class="form-label" for="password">Password</label>

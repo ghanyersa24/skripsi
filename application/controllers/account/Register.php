@@ -9,9 +9,9 @@ class Register extends CI_Controller
 			'full_name' => post('full_name', 'required'),
 			'address' => post('address'),
 			'phone' => post('phone', 'required|numeric'),
+			'username' => post('username', 'required|max_char:30|unique:users'),
 			'email' => post('email', 'required|email|unique:users'),
 			'password' => password_hash(post('password', 'required'), PASSWORD_DEFAULT, array('cost' => 10)),
-			'photo' => null
 		];
 
 		post('password_confirmation', 'same:password');

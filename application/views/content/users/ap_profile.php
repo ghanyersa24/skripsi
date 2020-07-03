@@ -11,7 +11,7 @@
       					<div class="col-12 col-md-12 col-lg-5">
       						<div class="card text-center">
       							<div class="my-3">
-      								<img class="rounded" style="height: 250px; width: 250px; object-fit:cover" src="<?= $this->session->userdata('foto') == '' ? 'https://vignette.wikia.nocookie.net/kdramas/images/a/a2/Ba8834c165874ef091d90cc567909c9c.png/revision/latest/top-crop/width/720/height/900?cb=20190803070125' : $this->session->userdata('foto'); ?>" alt="gambar profil">
+      								<img class="rounded" style="height: 250px; width: 250px; object-fit:cover" src="<?= $this->session->userdata('photo') ?>" alt="gambar profil">
       							</div>
       							<div class="">
       								<label for="view-full_name">Nama Lengkap</label>
@@ -25,9 +25,6 @@
       								<h4>Edit Profile</h4>
       							</div>
       							<div class="card-body">
-
-
-
       								<div class="form-group">
       									<label for="view-phone">Phone</label>
       									<input name="phone" id="view-phone" class="form-control" type="number" value="<?= $this->session->userdata('phone'); ?>">
@@ -55,8 +52,11 @@
       </div>
       <script>
       	$('#form-view').submit(function(e) {
-      		e.preventDefault();
-      		let data = $('#form-view').serialize()
-      		const req = requestPost(base_url + 'account/update', data)
+      		e.preventDefault()
+      		konfirm('melakukan pembaruan biodata diri').then((isSave) => {
+      			let data = $('#form-view').serialize()
+      			if (isSave)
+      				requestPost(base_url + 'account/update', data)
+      		})
       	});
       </script>

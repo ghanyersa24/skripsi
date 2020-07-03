@@ -16,6 +16,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
+	<link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css">
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/components.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/modules/select2/dist/css/select2.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.css">
@@ -32,11 +33,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- Global Javascript -->
 	<script src="<?= base_url() ?>assets/modules/jquery.min.js"></script>
 	<script src="<?= base_url() ?>assets/modules/sweetalert/sweetalert.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-	<script src="<?= base_url(); ?>assets/modules/moment.min.js"></script>
+	<!-- <script src="<?= base_url(); ?>assets/modules/moment.min.js"></script> -->
 	<script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
-	<script src="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
+	<!-- <script src="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script> -->
 	<script type="module" src="<?= base_url() . 'assets/js/viewer.min.js' ?>"></script>
 	<script src="<?= base_url() . 'assets/js/request.js' ?>"></script>
 	<script src="<?= base_url() . 'assets/js/akreditasi.js' ?>"></script>

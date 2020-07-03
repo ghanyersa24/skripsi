@@ -12,7 +12,10 @@ class Competency extends CI_Controller
 	public function create()
 	{
 		$data = array(
-			"column" => post('column'),
+			"competency" => post('competency', 'required'),
+			"bobot" => post('bobot', 'required|numeric'),
+			"details" => post('details', 'required'),
+			"role_id" => post('role_id', 'required'),
 		);
 
 		$do = DB_MODEL::insert($this->table, $data);
@@ -35,7 +38,9 @@ class Competency extends CI_Controller
 	public function update()
 	{
 		$data = array(
-			"column" => post('column'),
+			"competency" => post('competency', 'required'),
+			"bobot" => post('bobot', 'required|numeric'),
+			"details" => post('details', 'required'),
 		);
 
 		$where = array(

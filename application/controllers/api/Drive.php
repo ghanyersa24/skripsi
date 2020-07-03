@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class TEST extends CI_Controller
+class Drive extends CI_Controller
 {
 	function __construct()
 	{
@@ -19,7 +19,7 @@ class TEST extends CI_Controller
 	}
 	public function create()
 	{
-		success("File Berhasil upload ke google drive", GDRIVE::upload('all', 'gdrive', 'asdasd','Kompetensi'));
+		success("File Berhasil upload ke google drive", GDRIVE::upload('all', 'gdrive', 'asdasd'));
 	}
 
 	public function delete()

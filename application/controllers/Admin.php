@@ -26,38 +26,48 @@ class Admin extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function akreditasi($standar, $competency = null)
+	public function akreditasi($slug, $competency = null)
 	{
-		$standar = str_replace('standar-', '', $standar);
+		$slug = str_replace('%20', ' ', $slug);
+		$standar = explode('~', $slug, 2);
 		$find = false;
 		foreach ($this->access as $key => $value) {
-			if ($value->role_id ==  $standar)
+			if ($value->role_id ==  $standar[1])
 				$find = true;
 		}
 		if ($find) {
-			$data['title'] = 'Detail Standar ' . $standar;
+			$data['title'] = 'Detail ' . $standar[0];
 			$data['content'] = 'ap_competency';
-			$data['standar'] = $standar;
+			$data['role_id'] = $standar[1];
+			$data['standar'] = $standar[0];
+			$data['slug'] = $slug;
 			if (!is_null($competency))
-				$this->competency($standar, $competency);
+				$this->competency($slug, $competency, $data);
 			else
 				$this->load->view('template', $data);
 		} else
 			redirect('admin');
 	}
 
-	private function competency($standar, $competency)
+	private function competency($slug, $slugCompetency, $data)
 	{
-		$kompetensi = str_replace('kompetensi-', '', $competency);
-		$do = DB_MODEL::find('competency', ['role_id' => $standar, 'id' => $kompetensi]);
+		$slug = str_replace('%20', ' ', $slug);
+		$standar = explode('~', $slug, 2);
+
+		$slugCompetency = str_replace('%20', ' ', $slugCompetency);
+		$competency = explode('~', $slugCompetency, 2);
+
+		$do = DB_MODEL::find('competency', ['role_id' => $standar[1], 'id' => $competency[1]]);
 		if (!$do->error) {
-			$data['title'] = "Detail Kompetensi $kompetensi";
+			$data['title'] = "Detail " . $competency[0];
 			$data['content'] = 'ap_detail';
-			$data['standar'] = $standar;
-			$data['competency'] = $kompetensi;
+			$data['competency_id'] = $competency[1];
+			$data['competency'] = $competency[0];
+			$data['role_id'] = $standar[1];
+			$data['standar'] = $standar[0];
 			$this->load->view('template', $data);
 		} else
-			redirect('admin/akreditasi/standar-' . $standar);
+			redirect('admin/akreditasi/' . $slug);
 	}
 
 	public function profile()

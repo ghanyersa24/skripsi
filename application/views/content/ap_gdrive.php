@@ -8,8 +8,8 @@
 </head>
 
 <body>
-	<?php echo form_open_multipart('TEST/post'); ?>
-	<input type="file" name="hayo" id="">
+	<?php echo form_open_multipart('TEST/create'); ?>
+	<input type="file" name="gdrive" id="">
 	<input type="submit" value="Click here to upload a large (20MB) test file" />
 	</form>
 </body>
