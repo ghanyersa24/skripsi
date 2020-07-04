@@ -19,8 +19,10 @@ class Document extends CI_Controller
 				"title" => $title = post('judul', 'required'),
 				"location" => post('location'),
 				"year" => post('year', 'numeric'),
-				"link" => GDRIVE::upload('all', 'gdrive', $title, post('folderName', 'required')),
 			);
+			$drive = GDRIVE::upload('all', 'gdrive', null, post('folderName', 'required'));
+			$data['name'] = $drive['name'];
+			$data['link'] = $drive['url'];
 			$do = DB_MODEL::insert($this->table, $data);
 			if (!$do->error)
 				success("data " . $this->table . " berhasil ditambahkan", $do->data);
@@ -40,21 +42,71 @@ class Document extends CI_Controller
 			error("data " . $this->table . " gagal ditemukan");
 	}
 
+	public function list()
+	{
+		success("data", GDRIVE::listDrive()->files);
+	}
+
+	public function download()
+	{
+		echo GDRIVE::download('ca2b3b5dfa5806accaa0ff4afe08728f.png');
+	}
 	public function update()
 	{
-		$data = array(
-			"column" => post('column'),
-		);
+		$code = $this->input->get('code');
+		if ($code == null) {
+			$where = array(
+				"id" => post('id', 'required'),
+			);
+			$data = array(
+				"competency_id" => post('competency_id', 'required|numeric'),
+				"title" => $title = post('judul', 'required'),
+				"location" => post('location'),
+				"year" => post('year', 'numeric'),
+			);
+			if (isset($_FILES['gdrive'])) {
+				$drive = GDRIVE::upload('all', 'gdrive', null, post('folderName', 'required'));
+				$data['name'] = $drive['name'];
+				$data['link'] = $drive['url'];
+			}
+			$do = DB_MODEL::update($this->table, $where, $data);
+			if (!$do->error)
+				success("data " . $this->table . " berhasil ditambahkan", $do->data);
+			else
+				error("data " . $this->table . " gagal ditambahkan");
+		} else {
+			$this->session->set_userdata('code', $code);
+			echo "<script>window.close()</script>";
+		}
+	}
 
+	public function pengajuan()
+	{
 		$where = array(
 			"id" => post('id', 'required'),
 		);
 
+		$do = DB_MODEL::update($this->table, $where, ['status' => 'diajukan']);
+		if (!$do->error)
+			success("data " . $this->table . " berhasil diajukan untuk validasi", $do->data);
+		else
+			error("data " . $this->table . " gagal diajukan untuk validasi");
+	}
+
+	public function status()
+	{
+		$where = [
+			"id" => post('id', 'required'),
+		];
+		$data = [
+			'status' => $status = post('status', 'enum:revisi&tervalidasi&terdata'),
+			'note' => post('note', 'max_char:255')
+		];
 		$do = DB_MODEL::update($this->table, $where, $data);
 		if (!$do->error)
-			success("data " . $this->table . " berhasil diubah", $do->data);
+			success("data " . $this->table . " berhasil diubah menjadi status $status", $do->data);
 		else
-			error("data " . $this->table . " gagal diubah");
+			error("data " . $this->table . " gagal diubah menjadi $status");
 	}
 
 	public function delete()

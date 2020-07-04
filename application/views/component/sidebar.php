@@ -32,12 +32,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<!-- <li class="<?= $segment == 'teacher' ? 'active' : ''; ?>"><a class="nav-link" href="<?= base_url(); ?>admin/teacher"><i class="fas fa-user"></i> <span>Tenaga Pengajar</span></a></li>
 			<li class="<?= $segment == 'mapel' ? 'active' : ''; ?>"><a class="nav-link" href="<?= base_url(); ?>admin/mapel"><i class="fas fa-book"></i> <span>Mata Pelajaran</span></a></li> -->
 			<li class="<?= $segment == 'profile' ? 'active' : ''; ?>"><a class="nav-link" href="<?= base_url(); ?>admin/profile"><i class="fas fa-user"></i> <span>Profile</span></a></li>
-			<li id="btn-logout"><a class="nav-link" href="#"> <i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+			<li class="btn-logout"><a class="nav-link" href="#"> <i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
 		</ul>
 	</aside>
 </div>
 <script>
-	$('#btn-logout').click(function(e) {
+	$('.btn-logout').click(function(e) {
 		konfirm(`keluar dari sistem Sistem Informasi Manajemen Dokumen Akreditasi (SIMDA).`).then((isLogout) => {
 			if (isLogout)
 				window.location.replace('<?= base_url() . 'admin/logout' ?>')

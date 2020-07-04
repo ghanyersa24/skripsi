@@ -3,10 +3,10 @@
 		<div class="section-header d-block justify-content-start align-items-center">
 			<h1 class="pt-2 pb-2 mt-0 ml-3"><?= $title ?></h1>
 		</div>
-		<button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;z-index: 10;">
+
+		<button class="btn btn-info " id="btn-add-tps" data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;z-index: 10;">
 			<i class="fa fa-plus"></i>
 		</button>
-
 		<div class="section-body">
 			<div class="row mt-sm-4">
 				<div class="col-12 col-md-12 col-lg-12">
@@ -221,7 +221,6 @@
 	</div>
 </div>
 
-
 <div id="view-hak" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -247,8 +246,13 @@
 
 <script>
 	let role
+	let statusUser = `<?= $this->session->status ?>`
 	$(document).ready(function() {
 		getRole()
+		if (statusUser !== 'penanggung jawab') {
+			$('#btn-add-tps, #btn-access').hide()
+			$('input, textarea, select, button').prop('disabled', true)
+		}
 		$('#table-access tbody').on('click', '.btn-view', function() {
 			let data = $(`#table-access`).DataTable().row($(this).parents('tr')).data()
 			for (key in data) {
@@ -313,8 +317,10 @@
 				},
 				{
 					render: function(data, type, JsonResultRow, meta) {
-						return `<button class="btn btn-light btn-delete mr-1"><i class="fas fa-trash"></i></button>
-						<button class="btn btn-primary btn-view"><i class="fa fa-eye"></i> Detail </button>`
+						let action = `<button class="btn btn-primary btn-view"><i class="fa fa-eye"></i> Detail </button>`
+						if (statusUser == 'penanggung jawab')
+							action = `<button class="btn btn-light btn-delete mr-1"><i class="fas fa-trash"></i></button>` + action
+						return action
 					}
 				}
 			]

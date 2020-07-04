@@ -21,15 +21,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/modules/select2/dist/css/select2.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.css">
 
-	<!-- CSS per Page -->
-	<?php
-	if ($this->uri->segment(2) == "" || $this->uri->segment(2) == "index") { ?>
-		<link rel="stylesheet" href="<?= base_url() ?>assets/modules/jqvmap/dist/jqvmap.min.css">
-		<link rel="stylesheet" href="<?= base_url() ?>assets/modules/weather-icon/css/weather-icons.min.css">
-		<link rel="stylesheet" href="<?= base_url() ?>assets/modules/weather-icon/css/weather-icons-wind.min.css">
-		<link rel="stylesheet" href="<?= base_url() ?>assets/modules/summernote/summernote-bs4.css">
-	<?php
-	} ?>
 	<!-- Global Javascript -->
 	<script src="<?= base_url() ?>assets/modules/jquery.min.js"></script>
 	<script src="<?= base_url() ?>assets/modules/sweetalert/sweetalert.min.js"></script>
