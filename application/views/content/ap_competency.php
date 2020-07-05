@@ -140,20 +140,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	});
 	const printCompetency = () => {
 		let div = "";
-		const response = requestGet(api + 'competency/get/<?= $role_id ?>')
+		const response = requestGet(api + 'report/get?standar=<?= $role_id ?>')
 		if (!response.error)
 			response.data.forEach(print => {
-				div += `<div class="card col-sm-3 shadow-none ">
+				let infoCompetency = classText = ''
+				if (print.TOTAL == print.TERVALIDASI && print.TOTAL != 0)
+					infoCompetency = '<i class="mr-1 fas fa-check"></i>'
+				else if (print.TOTAL > 1)
+					infoCompetency = '<i class="mr-1 fab fa-telegram-plane"></i>'
+				if (print.DIAJUKAN > 0)
+					classText = 'text-warning'
+
+				div += `<div class="card col-sm-3  shadow-none ">
 							<div class="card-body shadow-sm rounded">
 							<?php if ($this->session->status == 'penanggung jawab') { ?>
 								<div class="d-flex flex-wrap justify-content-end align-items-center mr-0">
-									<i class="fa fa-edit click edit" onclick="view('${print.id}','${print.competency}','${print.bobot}','${print.details}')"></i>
+									<i class="fa fa-edit click edit" onclick="view('${print.COMPETENCY_ID}','${print.COMPETENCY}','${print.BOBOT}','${print.DETAILS}')"></i>
 								</div>
 							<?php } ?>
-                                <a href="<?= base_url() . 'admin/akreditasi/' . $slug ?>/${print.competency}~${print.id}" class="text-decoration-none">
-                                    <h5 class="card-title">${print.competency}</h5>
+                                <a href="<?= base_url() . 'admin/akreditasi/' . $slug ?>/${print.COMPETENCY}~${print.COMPETENCY_ID}" class="${classText} text-decoration-none">
+                                    <h5 class="card-title">${print.COMPETENCY}</h5>
                                     <hr>
-                                    <p class="card-text">${print.details} (bobot <span class="text-dark">${print.bobot} pt</span>).</p>
+                                    <p class="card-text">${print.DETAILS} (${infoCompetency} <span class="text-dark">${print.BOBOT} pt</span>).</p>
                                 </a>
                             </div>
                         </div>`;

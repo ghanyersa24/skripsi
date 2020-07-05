@@ -12,7 +12,8 @@ class Role extends CI_Controller
 	public function create()
 	{
 		$data = array(
-			"role" => post('role'),
+			"role" => post('role', 'required|unique:role'),
+			"bobot_komponen" => post('bobot_komponen', 'numeric'),
 		);
 
 		$do = DB_MODEL::insert($this->table, $data);
@@ -40,7 +41,8 @@ class Role extends CI_Controller
 	public function update()
 	{
 		$data = array(
-			"role" => post('role'),
+			"role" => post('role', 'required'),
+			"bobot_komponen" => post('bobot_komponen', 'numeric'),
 		);
 
 		$where = array(

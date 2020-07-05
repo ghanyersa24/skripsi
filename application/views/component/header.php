@@ -18,18 +18,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css">
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/components.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>assets/modules/select2/dist/css/select2.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.css">
 
 	<!-- Global Javascript -->
 	<script src="<?= base_url() ?>assets/modules/jquery.min.js"></script>
 	<script src="<?= base_url() ?>assets/modules/sweetalert/sweetalert.min.js"></script>
-	<!-- <script src="<?= base_url(); ?>assets/modules/moment.min.js"></script> -->
 	<script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
-	<!-- <script src="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-	<script src="<?php echo base_url(); ?>assets/modules/chart.min.js"></script>
+	<script src="<?= base_url(); ?>assets/modules/chart.min.js"></script>
 	<script src="<?= base_url() . 'assets/js/request.js' ?>"></script>
-	<script src="<?= base_url() . 'assets/js/akreditasi.js' ?>"></script>
 	<script>
 		const api = '<?= base_url() ?>api/'
 		const base_url = '<?= base_url() ?>'

@@ -61,6 +61,7 @@
 							<tr>
 								<th class="text-center" width="10%">No.</th>
 								<th>Role</th>
+								<th>Bobot</th>
 								<th width="10%">Aksi</th>
 							</tr>
 						</thead>
@@ -211,6 +212,10 @@
 						<label for="add-access-role">Role</label>
 						<input id="add-access-role" class="form-control" type="text" name="role" required>
 					</div>
+					<div class="form-group">
+						<label for="add-access-bobot_komponen">Bobot Komponen</label>
+						<input id="add-access-bobot_komponen" class="form-control" type="number" name="bobot_komponen" required>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -233,6 +238,10 @@
 						<label for="view-access-role">Role</label>
 						<input id="view-access-id" class="form-control" type="number" name="id" required readonly hidden>
 						<input id="view-access-role" class="form-control" type="text" name="role" required>
+					</div>
+					<div class="form-group">
+						<label for="view-access-bobot_komponen">Bobot Komponen</label>
+						<input id="view-access-bobot_komponen" class="form-control" type="number" name="bobot_komponen" required>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -404,6 +413,8 @@
 					className: "text-center"
 				}, {
 					data: "role"
+				}, {
+					data: "bobot_komponen"
 				},
 				{
 					render: function(data, type, JsonResultRow, meta) {

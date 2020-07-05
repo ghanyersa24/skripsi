@@ -3,53 +3,109 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Report extends CI_Controller
 {
-	protected $table = "table";
-	public function __construct()
-	{
-		parent::__construct();
-		// additional library
-	}
 	public function get()
 	{
 		$standar = empty($this->input->get('standar')) ? null : $this->input->get('standar');
-		if (is_null($standar))
+		if (is_null($standar)) {
 			$do = DB_CUSTOM::perStandar();
-		else
+			$perCompetency = DB_CUSTOM::perCompetency();
+			$data = [
+				'standar' => $do->data,
+				'rekap' => $this->rekap($perCompetency->data)
+			];
+		} else {
 			$do = DB_CUSTOM::perCompetency($standar);
+			$data = $do->data;
+		}
 		if (!$do->error)
-			success("data rekap berhasil ditemukan", $do->data);
+			success("data rekap berhasil ditemukan", $data);
 		else
 			error("data rekap gagal ditemukan");
 	}
-
-
-	public function update()
+	private function rekap($data)
 	{
-		$data = array(
-			"column" => post('column'),
-		);
 
-		$where = array(
-			"id" => post('id', 'required'),
-		);
+		$rekap = [];
+		$standar = "";
+		$i = -1;
+		foreach ($data as $value) {
+			if ($standar != $value->STANDAR_ID) {
+				$i++;
+				$standar = $value->STANDAR_ID;
+				$rekap[$i]['id'] = $value->STANDAR_ID;
+				$rekap[$i]['standar'] = $value->STANDAR;
+			}
+			if (isset($rekap[$i]['totalCompetency']))
+				$rekap[$i]['totalCompetency'] += 1;
+			else
+				$rekap[$i]['totalCompetency'] = 1;
 
-		$do = DB_MODEL::update($this->table, $where, $data);
-		if (!$do->error)
-			success("data " . $this->table . " berhasil diubah", $do->data);
-		else
-			error("data " . $this->table . " gagal diubah");
-	}
+			if ($value->TOTAL > 0) {
+				if (isset($rekap[$i]['applyCompetency']))
+					$rekap[$i]['applyCompetency'] += 1;
+				else
+					$rekap[$i]['applyCompetency'] = 1;
 
-	public function delete()
-	{
-		$where = array(
-			"id" => post('id', 'required')
-		);
+				if (isset($rekap[$i]['totalDocument']))
+					$rekap[$i]['totalDocument'] += $value->TOTAL;
+				else
+					$rekap[$i]['totalDocument'] = (int) $value->TOTAL;
 
-		$do = DB_MODEL::delete($this->table, $where);
-		if (!$do->error)
-			success("data " . $this->table . " berhasil dihapus", $do->data);
-		else
-			error("data " . $this->table . " gagal dihapus");
+				if (isset($rekap[$i]['totalTerdata']))
+					$rekap[$i]['totalTerdata'] += $value->TERDATA;
+				else
+					$rekap[$i]['totalTerdata'] = (int) $value->TERDATA;
+
+				if (isset($rekap[$i]['totalTervalidasi']))
+					$rekap[$i]['totalTervalidasi'] += $value->TERVALIDASI;
+				else
+					$rekap[$i]['totalTervalidasi'] = (int) $value->TERVALIDASI;
+
+				if (isset($rekap[$i]['totalRevisi']))
+					$rekap[$i]['totalRevisi'] += $value->REVISI;
+				else
+					$rekap[$i]['totalRevisi'] = (int) $value->REVISI;
+
+				if (isset($rekap[$i]['totalDiajukan']))
+					$rekap[$i]['totalDiajukan'] += $value->DIAJUKAN;
+				else
+					$rekap[$i]['totalDiajukan'] = (int) $value->DIAJUKAN;
+			}
+
+
+			$rekap[$i]['bobot'] = (int) $value->BOBOT_KOMPONEN;
+			if (isset($rekap[$i]['perolehan']))
+				$rekap[$i]['perolehan'] += ($value->TERVALIDASI / max($value->TOTAL, 1)) * 4;
+			else
+				$rekap[$i]['perolehan'] = ($value->TERVALIDASI / max($value->TOTAL, 1)) * 4;
+
+			if (isset($rekap[$i]['skorMax']))
+				$rekap[$i]['skorMax'] += $value->BOBOT * 4;
+			else
+				$rekap[$i]['skorMax'] = $value->BOBOT * 4;
+		}
+		$finall = $i = 0;
+		foreach ($rekap as $value) {
+			$temp = ($rekap[$i]['perolehan'] / $value['skorMax']) * $value['bobot'];
+			$rekap[$i++]['akreditasi'] = (float) number_format($temp, 2, '.', '');
+			$finall += $temp;
+		}
+		$finall = round($finall, 0);
+		if (91 <= $finall && $finall <= 100)
+			$peringkat = 'Akreditasi A (Unggul)';
+		elseif (81 <= $finall && $finall <= 90)
+			$peringkat = 'Akreditasi B (Baik)';
+		elseif (71 <= $finall && $finall <= 80)
+			$peringkat = 'Akreditasi C (Cukup)';
+		elseif (61 <= $finall && $finall <= 70)
+			$peringkat = 'Akreditasi D (Kurang)';
+		elseif (0 <= $finall && $finall <= 60)
+			$peringkat = 'Akreditasi E (Sangat Kurang)';
+
+		return [
+			'nilai_akhir' => $finall,
+			'peringkat' => $peringkat,
+			'rekap' => $rekap
+		];
 	}
 }

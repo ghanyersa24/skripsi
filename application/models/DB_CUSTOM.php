@@ -68,9 +68,11 @@ class DB_CUSTOM extends CI_Model
 		$sql = "SELECT
 		`role`.`id` STANDAR_ID,
 		`role`.`role` STANDAR,
+		`role`.`bobot_komponen` BOBOT_KOMPONEN,
 		`competency`.`id` COMPETENCY_ID,
 		`competency`.`competency` COMPETENCY,
 		`competency`.`bobot` BOBOT,
+		`competency`.`details` DETAILS,
 		`competency`.`bobot` * COUNT(`document`.`competency_id`) MAX_POINT,
 		COUNT(`document`.`competency_id`) TOTAL,
 		(

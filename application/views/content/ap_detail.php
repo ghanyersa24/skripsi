@@ -138,7 +138,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div id="diajukan" style="display: none;">
 								<div class="form-group">
 									<label>Status Dokumen</label>
-									<p>Dokumen ini sedang <span class="badge badge-secondary">Diajukan</span>. untuk sementara dokumen ini tidak bisa diubah.</p>
+									<p>Dokumen ini sedang <span class="badge badge-secondary">Diajukan</span>. untuk sementara <a class="view-link" target="_blank" href="">dokumen ini </a> tidak bisa diubah.</p>
 								</div>
 							</div>
 							<div id="tervalidasi" style="display: none;">
@@ -185,7 +185,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+						<button type="button" class="btn btn-default" id="btn-hapus">Hapus</button>
 						<button type="button" class="btn" id="btn-save">Simpan</button>
 					</div>
 				</form>
@@ -193,7 +193,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		</div>
 	</div>
 </div>
-
 <script>
 	$(document).ready(function() {
 		$('#btn-add').click(async (e) => {
@@ -285,6 +284,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			}
 		})
 
+		$('#btn-hapus').click(function(e) {
+			e.preventDefault();
+			konfirm('menghapus dokumen ini dari daftar dokumen akreditasi.').then((yes) => {
+				if (yes) {
+					const req = requestPost(api + 'document/delete', {
+						id: $('#view-id').val()
+					})
+					if (!req.error) {
+						$('#table').DataTable().ajax.reload()
+						$('#view').modal('hide')
+					}
+				}
+			})
+		});
+
 		$('#btn-pengajuan').click(function(e) {
 			konfirm('mengajukan dokumen ini untuk divalidasi.').then((yes) => {
 				if (yes) {
@@ -349,4 +363,36 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	});
 
 	const formStatus = () => $('#formStatus').toggle()
+
+	const status = (params) => {
+		if (params == 'tervalidasi')
+			return `<div class="badge badge-info w-100">Tervalidasi</div>`;
+		else if (params == 'terdata')
+			return `<div class="badge badge-default w-100">Terdata</div>`;
+		else if (params == 'diajukan')
+			return `<div class="badge badge-secondary w-100">Diajukan</div>`;
+		else if (params == 'revisi')
+			return `<div class="badge badge-warning w-100">Revisi</div>`;
+		else
+			return `<div class="badge badge-light w-100">Tidak sesuai kondisi</div>`;
+	}
+
+	const statusDocument = (status) => {
+		$('#btn-save, #btn-hapus').prop('disabled', true)
+		$('#terdata, #diajukan, #tervalidasi, #revisi, #formStatus').hide()
+		if (status == 'diajukan') {
+			$('#formStatus, #diajukan').show()
+			$('#form-view input').prop("disabled", true)
+		} else if (status == 'tervalidasi') {
+			$('#form-view input').prop("disabled", true)
+			$('#tervalidasi').show()
+		} else if (status == 'revisi') {
+			$('#btn-save, #form-view input, #btn-hapus').prop('disabled', false)
+			$('#revisi').show()
+		} else {
+			$('#btn-save, #form-view input, #btn-hapus').prop('disabled', false)
+			$('#terdata').show()
+		}
+
+	}
 </script>
