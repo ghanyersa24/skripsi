@@ -6,13 +6,30 @@ class Update extends CI_Controller
 	public function index()
 	{
 		$where = array(
-			"id" =>  $this->session->userdata('id'),
+			"id" =>  $id = $this->session->id,
 		);
 		$data = [
-			'full_name' => post('full_name', 'required'),
+			'username' => $username = post('username', "required|update_unique:users&$id"),
+			'full_name' => post('full_name', "required|update_unique:users&$id"),
 			'address' => post('address'),
 			'phone' => post('phone', 'required|numeric'),
 			'email' => post('email', 'required|email'),
+		];
+		$do = DB_MODEL::update('users', $where, $data);
+		if (!$do->error) {
+			$this->session->set_userdata($data);
+			success("data berhasil diubah", $do->data);
+		} else {
+			error("data gagal diubah");
+		}
+	}
+	public function photo()
+	{
+		$where = array(
+			"id" =>  $id = $this->session->id,
+		);
+		$data = [
+			'photo' => UPLOAD_FILE::img('photo', 'upload/profil', $this->session->username)
 		];
 		$do = DB_MODEL::update('users', $where, $data);
 		if (!$do->error) {

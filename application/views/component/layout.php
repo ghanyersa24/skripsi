@@ -165,7 +165,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</div>
 					</li> -->
 					<li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-							<img alt="profile" src="<?= $this->session->photo ?>" class="rounded-circle mr-1" style="object-fit:cover; object-position: center; width:30px; height:30px">
+							<img alt="profile" src="<?= $this->session->photo == '' ? 'https://4.bp.blogspot.com/-pQD-irIgjU0/V5SSGHNCC7I/AAAAAAAAEsI/2UEF1E1m7LA02zWyJJdHGoUbUDk22-YLgCLcB/s72-w680-c/Song%2BJoong-Ki%2Bsebagai%2BYoo%2BShi-Jin%2B3.png' : base_url() . $this->session->photo ?>" class="rounded-circle mr-1" style="object-fit:cover; object-position: center; width:30px; height:30px">
 							<div class="d-sm-none d-lg-inline-block">Hi, <?= $this->session->full_name ?></div>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">

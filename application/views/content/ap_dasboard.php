@@ -108,6 +108,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		$('#peringkat').text(req.data.rekap.peringkat)
 		$('#table').DataTable({
 			data: req.data.rekap.rekap,
+			dom: 'Bfrtip',
+			buttons: [{
+					extend: 'excelHtml5',
+					footer: true
+				},
+				{
+					extend: 'pdfHtml5',
+					footer: true
+				},
+				{
+					extend: 'print',
+					footer: true,
+				}
+			],
 			searching: false,
 			ordering: false,
 			paging: false,

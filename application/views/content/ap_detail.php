@@ -315,6 +315,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 		$('#table').DataTable({
 			ajax: api + 'document/get/<?= $competency_id ?>',
+			dom: 'Bfrtip',
+			buttons: [{
+					extend: 'excelHtml5',
+					footer: true
+				},
+				{
+					extend: 'pdfHtml5',
+					footer: true
+				},
+				{
+					extend: 'print',
+					footer: true,
+				}
+			],
 			footerCallback: function(row, data, start, end, display) {
 				let all = data.length;
 				let valid = 0;
