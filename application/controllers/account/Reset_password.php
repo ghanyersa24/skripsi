@@ -15,7 +15,7 @@ class Reset_password extends CI_Controller
 			$data = array(
 				'password' => password_hash($new_password, PASSWORD_DEFAULT, array('cost' => 10))
 			);
-			$do = DB_MODEL::update('users', $where, $data);
+			$do = DB_MASTER::update('users', $where, $data);
 			if (!$do->error) {
 				success("password berhasil diubah", $do->data);
 			} else {

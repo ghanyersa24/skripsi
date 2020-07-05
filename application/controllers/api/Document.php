@@ -7,7 +7,7 @@ class Document extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper('gdrive');
+		$this->load->helper(['gdrive', 'history']);
 	}
 
 	public function create()
@@ -20,13 +20,15 @@ class Document extends CI_Controller
 				"location" => post('location'),
 				"year" => post('year', 'numeric'),
 			);
-			$drive = GDRIVE::upload('all', 'gdrive', null, post('folderName', 'required'));
+			$drive = GDRIVE::upload('all', 'gdrive',  $title, post('folderName', 'required'));
 			$data['name'] = $drive['name'];
 			$data['link'] = $drive['url'];
-			$do = DB_MODEL::insert($this->table, $data);
-			if (!$do->error)
+			$do = DB_MASTER::insert($this->table, $data);
+			if (!$do->error) {
+				$slug = post('standar') . '~' . post('standar_id') . '/' . post('competency') . '~' . post('competency_id');
+				HISTORY::create('create', $title . ' ', $do->data['id'], $slug);
 				success("data " . $this->table . " berhasil ditambahkan", $do->data);
-			else
+			} else
 				error("data " . $this->table . " gagal ditambahkan");
 		} else {
 			$this->session->set_userdata('code', $code);
@@ -65,14 +67,16 @@ class Document extends CI_Controller
 				"year" => post('year', 'numeric'),
 			);
 			if (isset($_FILES['gdrive'])) {
-				$drive = GDRIVE::upload('all', 'gdrive', null, post('folderName', 'required'));
+				$drive = GDRIVE::upload('all', 'gdrive', $title, post('folderName', 'required'));
 				$data['name'] = $drive['name'];
 				$data['link'] = $drive['url'];
 			}
-			$do = DB_MODEL::update($this->table, $where, $data);
-			if (!$do->error)
+			$do = DB_MASTER::update($this->table, $where, $data);
+
+			if (!$do->error) {
+				HISTORY::create('update', $title, post('id', 'required'));
 				success("data " . $this->table . " berhasil ditambahkan", $do->data);
-			else
+			} else
 				error("data " . $this->table . " gagal ditambahkan");
 		} else {
 			$this->session->set_userdata('code', $code);
@@ -86,10 +90,12 @@ class Document extends CI_Controller
 			"id" => post('id', 'required'),
 		);
 
-		$do = DB_MODEL::update($this->table, $where, ['status' => 'diajukan']);
-		if (!$do->error)
+		$do = DB_MASTER::update($this->table, $where, ['status' => 'diajukan']);
+		if (!$do->error) {
+			$slug = post('standar') . '~' . post('standar_id') . '/' . post('competency') . '~' . post('competency_id');
+			HISTORY::create('pengajuan', post('title'), post('id', 'required'), $slug);
 			success("data " . $this->table . " berhasil diajukan untuk validasi", $do->data);
-		else
+		} else
 			error("data " . $this->table . " gagal diajukan untuk validasi");
 	}
 
@@ -100,25 +106,27 @@ class Document extends CI_Controller
 		];
 		$data = [
 			'status' => $status = post('status', 'enum:revisi&tervalidasi&terdata'),
-			'note' => post('note', 'max_char:255')
+			'note' => $note = post('note', 'max_char:255')
 		];
-		$do = DB_MODEL::update($this->table, $where, $data);
-		if (!$do->error)
+		$do = DB_MASTER::update($this->table, $where, $data);
+		if (!$do->error) {
+			HISTORY::create($status, post('title'), post('id', 'required'), $note);
 			success("data " . $this->table . " berhasil diubah menjadi status $status", $do->data);
-		else
+		} else
 			error("data " . $this->table . " gagal diubah menjadi $status");
 	}
 
 	public function delete()
 	{
 		$where = array(
-			"id" => post('id', 'required')
+			"id" => $id = post('id', 'required')
 		);
 
 		$do = DB_MODEL::delete($this->table, $where);
-		if (!$do->error)
+		if (!$do->error) {
+			HISTORY::create('delete', post('title'), post('id', 'required'));
 			success("data " . $this->table . " berhasil dihapus", $do->data);
-		else
+		} else
 			error("data " . $this->table . " gagal dihapus");
 	}
 }

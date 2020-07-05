@@ -19,21 +19,12 @@ class CompetencyTeacher extends CI_Controller
 			"reference" => post('reference', 'required')
 		);
 
-		$do = DB_MODEL::insert($this->table, $data);
+		$do = DB_MASTER::insert($this->table, $data);
 		if (!$do->error) {
 			success("data " . $this->table . " berhasil ditambahkan", $do->data);
 		} else {
 			error("data " . $this->table . " gagal ditambahkan");
 		}
-	}
-
-	public function get($kompetensi)
-	{
-		$do = DB_CUSTOM::documentTeacher($kompetensi);
-		if (!$do->error)
-			success("data " . $this->table . " berhasil ditemukan", $do->data);
-		else
-			error("data " . $this->table . " gagal ditemukan");
 	}
 
 	public function update()
@@ -46,7 +37,7 @@ class CompetencyTeacher extends CI_Controller
 			"id" => post('id', 'required'),
 		);
 
-		$do = DB_MODEL::update($this->table, $where, $data);
+		$do = DB_MASTER::update($this->table, $where, $data);
 		if (!$do->error)
 			success("data " . $this->table . " berhasil diubah", $do->data);
 		else

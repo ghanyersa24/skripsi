@@ -15,7 +15,7 @@ class Update extends CI_Controller
 			'phone' => post('phone', 'required|numeric'),
 			'email' => post('email', 'required|email'),
 		];
-		$do = DB_MODEL::update('users', $where, $data);
+		$do = DB_MASTER::update('users', $where, $data);
 		if (!$do->error) {
 			$this->session->set_userdata($data);
 			success("data berhasil diubah", $do->data);
@@ -31,7 +31,7 @@ class Update extends CI_Controller
 		$data = [
 			'photo' => UPLOAD_FILE::img('photo', 'upload/profil', $this->session->username)
 		];
-		$do = DB_MODEL::update('users', $where, $data);
+		$do = DB_MASTER::update('users', $where, $data);
 		if (!$do->error) {
 			$this->session->set_userdata($data);
 			success("data berhasil diubah", $do->data);
@@ -55,7 +55,7 @@ class Update extends CI_Controller
 			'username' => post('username', "required|update_unique:users&$id"),
 			'status' => post('status', 'required|enum:tim pengembang sekolah&penanggung jawab'),
 		];
-		$do = DB_MODEL::update('users', $where, $data);
+		$do = DB_MASTER::update('users', $where, $data);
 		foreach ($this->input->post('access') as $value) {
 			$access[] = [
 				'users_id' => $do->data['id'],

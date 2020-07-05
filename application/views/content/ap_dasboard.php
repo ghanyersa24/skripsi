@@ -17,7 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<label>dengan jumlah <span id="point" class="text-warning"></span> <span class="text-warning">poin</span> akreditasi. </span></label>
 							</div>
 							<div class="table-responsive">
-								<table class="table table-striped" id="table">
+								<table class="table table-striped w-100" id="table">
 									<thead>
 										<tr>
 											<th class="text-center" width="5%">
@@ -37,49 +37,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class="card h-75">
+					<div class="card">
 						<div class="card-header">
-							<div class="card-icon">
-								<i class="far fa-question-circle"></i>
-							</div>
-							<h4>14</h4>
-							<div class="card-description">Breaking News</div>
+							<div class="card-description h5">Riwayat</div>
 						</div>
 						<div class="card-body p-0">
-							<div class="tickets-list">
-								<a href="#" class="ticket-item">
-									<div class="ticket-title">
-										<h4>Lengkapi data produk inovasi anda</h4>
-									</div>
-									<div class="ticket-info">
-										<div>UB Riset Administrator</div>
-										<div class="bullet"></div>
-										<div class="text-primary">1 menit lalu</div>
-									</div>
-								</a>
-								<a href="#" class="ticket-item">
-									<div class="ticket-title">
-										<h4>Workshop pelatihan PPBT</h4>
-									</div>
-									<div class="ticket-info">
-										<div>UB Riset Administrator</div>
-										<div class="bullet"></div>
-										<div>6 jam lalu</div>
-									</div>
-								</a>
-								<a href="#" class="ticket-item">
-									<div class="ticket-title">
-										<h4>Update terbaru produk dikti</h4>
-									</div>
-									<div class="ticket-info">
-										<div>UB Riset Administrator</div>
-										<div class="bullet"></div>
-										<div>6 jam lalu</div>
-									</div>
-								</a>
-								<a href="features-tickets.html" class="ticket-item ticket-more">
-									Lihat Semua <i class="fas fa-chevron-right"></i>
-								</a>
+							<div class="tickets-list overflow-auto vh-100" id="history">
+
 							</div>
 						</div>
 					</div>
@@ -106,6 +70,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		const req = requestGet(api + 'report/get')
 		$('#point').text(req.data.rekap.nilai_akhir)
 		$('#peringkat').text(req.data.rekap.peringkat)
+
 		$('#table').DataTable({
 			data: req.data.rekap.rekap,
 			dom: 'Bfrtip',
@@ -198,6 +163,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				}
 			});
 		});
+
+		const history = requestGet(api + 'history/get')
+		printHistory(history.data)
 	});
 
 	const format = (d) => {
@@ -223,5 +191,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'<td>' + d.totalDiajukan + ' Dokumen</td>' +
 			'</tr>' +
 			'</table>';
+	}
+	const printHistory = (data) => {
+		let hist = ""
+		data.forEach(element => {
+			hist += `<a href="${base_url}/admin/akreditasi/${element.slug}" class="ticket-item ${element.type=='pengajuan'?'text-warning':'text-primary'}">
+						<div class="ticket-title">
+							<h4>${element.message}</h4>
+						</div>
+						<div class="ticket-info">
+							<div>${element.full_name}</div>
+						<div class="bullet"></div>
+						<div class="text-primary">${element.created_at}</div>
+						</div>
+					</a>`
+		});
+		$('#history').html(hist)
 	}
 </script>

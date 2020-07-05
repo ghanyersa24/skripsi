@@ -21,7 +21,7 @@ class Teacher extends CI_Controller
 			"last_ed" => post('last_ed', 'enum:SMA/MA&D1&D2&D3&S1/D4&S2&S3'),
 		);
 
-		$do = DB_MODEL::insert($this->table, $data);
+		$do = DB_MASTER::insert($this->table, $data);
 		if (!$do->error) {
 			success("data " . $this->table . " berhasil ditambahkan", $do->data);
 		} else {
@@ -59,7 +59,7 @@ class Teacher extends CI_Controller
 			"id" => post('id', 'required'),
 		);
 
-		$do = DB_MODEL::update($this->table, $where, $data);
+		$do = DB_MASTER::update($this->table, $where, $data);
 		if (!$do->error)
 			success("data " . $this->table . " berhasil diubah", $do->data);
 		else

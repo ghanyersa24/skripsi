@@ -103,7 +103,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<form id="form-view" name="form-view">
 					<input type="number" class="form-control" id="view-id" name="id" readonly hidden>
 					<div class="modal-body row" id="form-data">
-						<div class="col border-right">
+						<div class="col-sm-4 border-right">
 							<div class="form-group">
 								<label for="view-title">Judul Dokumen</label>
 								<input type="text" class="form-control" id="view-title" name="title">
@@ -127,61 +127,72 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</div>
 							<!-- <button class="btn btn-primary mt-3 w-100" type="button" data-toggle="modal" data-target="#unggah">Unggah Berkas</button> -->
 						</div>
-						<div class="col-sm-8 mx-md-5 px-md-5">
-							<div id="terdata">
-								<div class="form-group">
-									<label>Status Dokumen</label>
-									<p>kamu sudah mengunggah dokumen pada <a class="view-link" target="_blank" href="">link.</a></p>
+						<div class="col-sm-6 ml-md-5">
+							<div id="view-status-document">
+								<div id="terdata">
+									<div class="form-group">
+										<label>Status Dokumen</label>
+										<p>kamu sudah mengunggah dokumen pada <a class="view-link" target="_blank" href="">link.</a></p>
+									</div>
+									<span class=" click text-info" id="btn-pengajuan">Ajukan Validasi Dokumen !</span>
 								</div>
-								<span class=" click text-info" id="btn-pengajuan">Ajukan Validasi Dokumen !</span>
-							</div>
-							<div id="diajukan" style="display: none;">
-								<div class="form-group">
-									<label>Status Dokumen</label>
-									<p>Dokumen ini sedang <span class="badge badge-secondary">Diajukan</span>. untuk sementara <a class="view-link" target="_blank" href="">dokumen ini </a> tidak bisa diubah.</p>
-								</div>
-							</div>
-							<div id="tervalidasi" style="display: none;">
-								<div class="d-block mt-4">
-									<span> <span class="h6">Selamat,</span> dokumen ini sudah <div class="badge badge-info">Tervalidasi</div>. <br> dokumen ini tidak bisa diubah lagi.</span>
-									<a class="view-link" target="_blank" href="">lihat dokumen.</a>
-								</div>
-							</div>
-							<div id="revisi" style="display: none;">
-								<div class="d-block mt-4">
-									<span> <span class="h6">Sabar ya,</span> dokumen ini berstatus <div class="badge badge-warning">Revisi</div>. <br> <b>Note : </b> <span id="view-note"></span>.</span>
-									<a class="view-link" target="_blank" href="">lihat dokumen.</a>
-								</div>
-							</div>
-							<!-- <br> -->
-							<hr>
-							<?php
-							if ($this->session->status == 'penanggung jawab') {
-							?>
-								<div id="validator">
-									<p class="h6 mb-3 click" onclick="formStatus()"> <u>Formulir Status Dokumen</u></p>
-									<div id="formStatus" style="display: none;">
-										<div class="form-group">
-											<input class="form-control" type="text" id="view-status" hidden readonly>
-											<label>Status</label>
-											<select id="add-status" class="form-control" name="status">
-												<option value="terdata">Terdata</option>
-												<option value="revisi">Revisi</option>
-												<option value="tervalidasi">Tervalidasi</option>
-											</select>
-										</div>
-										<div class="form-group">
-											<label for="add-note">Catatan</label>
-											<textarea id="add-note" class="form-control" name="note" rows="3"></textarea>
-										</div>
-										<div class="d-flex justify-content-end">
-											<button class="btn btn-primary" id="btn-status" type="button">Simpan Status Dokumen</button>
-										</div>
+								<div id="diajukan" style="display: none;">
+									<div class="form-group">
+										<label>Status Dokumen</label>
+										<p>Dokumen ini sedang <span class="badge badge-secondary">Diajukan</span>. untuk sementara <a class="view-link" target="_blank" href="">dokumen ini </a> tidak bisa diubah.</p>
 									</div>
 								</div>
-							<?php
-							}
-							?>
+								<div id="tervalidasi" style="display: none;">
+									<div class="d-block mt-4">
+										<span> <span class="h6">Selamat,</span> dokumen ini sudah <div class="badge badge-info">Tervalidasi</div>. <br> dokumen ini tidak bisa diubah lagi.</span>
+										<a class="view-link" target="_blank" href="">lihat dokumen.</a>
+									</div>
+								</div>
+								<div id="revisi" style="display: none;">
+									<div class="d-block mt-4">
+										<span> <span class="h6">Sabar ya,</span> dokumen ini berstatus <div class="badge badge-warning">Revisi</div>. <br> <b>Note : </b> <span id="view-note"></span>.</span>
+										<a class="view-link" target="_blank" href="">lihat dokumen.</a>
+									</div>
+								</div>
+								<!-- <br> -->
+								<hr>
+								<?php
+								if ($this->session->status == 'penanggung jawab') {
+								?>
+									<div id="validator">
+										<p class="h6 mb-3 click" onclick="formStatus()"> <u>Formulir Status Dokumen</u></p>
+										<div id="formStatus" style="display: none;">
+											<div class="form-group">
+												<input class="form-control" type="text" id="view-status" hidden readonly>
+												<label>Status</label>
+												<select id="add-status" class="form-control" name="status">
+													<option value="terdata">Terdata</option>
+													<option value="revisi">Revisi</option>
+													<option value="tervalidasi">Tervalidasi</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label for="add-note">Catatan</label>
+												<textarea id="add-note" class="form-control" name="note" rows="3"></textarea>
+											</div>
+											<div class="d-flex justify-content-end">
+												<button class="btn btn-primary" id="btn-status" type="button">Simpan Status Dokumen</button>
+											</div>
+										</div>
+									</div>
+								<?php
+								}
+								?>
+							</div>
+							<div id="view-history-document" class="tickets-list overflow-auto" style="display: none;height: 60vh;">
+							</div>
+						</div>
+						<div class="col">
+							<div class="d-flex justify-content-center h-100">
+								<div class="d-flex align-items-center">
+									<button class="btn btn-default rounded-circle" type="button" id="btn-history"><i class="fas fa-history" style="font-size: 2.5em;"></i></button>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -194,6 +205,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 </div>
 <script>
+	let showHistory = false
+	let standar = `<?= $standar ?>`,
+		competency = `<?= $competency ?>`,
+		competency_id = `<?= $competency_id ?>`,
+		standar_id = `<?= $role_id ?>`
 	$(document).ready(function() {
 		$('#btn-add').click(async (e) => {
 			let formData = new FormData()
@@ -203,6 +219,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			formData.append('year', $('#add-year').val())
 			formData.append('location', $('#add-location').val())
 			formData.append('folderName', '<?= $competency ?>')
+			formData.append('standar', standar)
+			formData.append('standar_id', standar_id)
+			formData.append('competency', competency)
 			await $('#progress-upload').fadeIn()
 			await $.ajax({
 				type: "POST",
@@ -213,7 +232,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				success: function(res) {
 					$('#progress-upload').fadeOut()
 					if (!res.error) {
-						swal('Berhasil !', res.message, 'success')
+						swal('Berhasil !', 'data dokumen berhasil ditambahkan', 'success')
 						$('#add').modal('hide')
 						$('#table').DataTable().ajax.reload()
 						$('#form-add input').val('')
@@ -270,11 +289,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			})
 		})
 
+		$('#btn-history').click(function(e) {
+			if (showHistory) {
+				$('#view-history-document').slideToggle()
+				$('#view-status-document').slideToggle('slow')
+				$('#btn-history').html(`<i class="fas fa-history" style="font-size: 2.5em;"></i>`)
+				showHistory = false
+			} else {
+				$('#view-status-document').slideToggle()
+				$('#view-history-document').slideToggle('slow')
+				$('#btn-history').html(`<i class="far fa-times-circle" style="font-size: 2.5em;"></i>`)
+				showHistory = true
+				printHistory()
+			}
+		})
+
 		$('#btn-status').click(function(e) {
 			const data = {
 				id: $('#view-id').val(),
 				status: $('#add-status').val(),
-				note: $('#add-note').val()
+				note: $('#add-note').val(),
+				title: $('#view-title').val()
 			}
 			const req = requestPost(api + 'document/status', data)
 			if (!req.error) {
@@ -289,7 +324,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			konfirm('menghapus dokumen ini dari daftar dokumen akreditasi.').then((yes) => {
 				if (yes) {
 					const req = requestPost(api + 'document/delete', {
-						id: $('#view-id').val()
+						id: $('#view-id').val(),
+						title: $('#view-title').val()
 					})
 					if (!req.error) {
 						$('#table').DataTable().ajax.reload()
@@ -303,7 +339,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			konfirm('mengajukan dokumen ini untuk divalidasi.').then((yes) => {
 				if (yes) {
 					const req = requestPost(api + 'document/pengajuan', {
-						id: $('#view-id').val()
+						id: $('#view-id').val(),
+						title: $('#view-title').val(),
+						standar: standar,
+						standar_id: standar_id,
+						competency: competency,
+						competency_id: competency_id,
 					})
 					if (!req.error) {
 						statusDocument('diajukan')
@@ -408,5 +449,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			$('#terdata').show()
 		}
 
+	}
+
+	const printHistory = () => {
+		let hist = ""
+		const req = requestGet(api + 'history/get/' + $('#view-id').val())
+		req.data.forEach(element => {
+			hist += `<a href="${base_url}/admin/akreditasi/${element.slug}" class="ticket-item ${element.type=='pengajuan'?'text-warning':'text-primary'}">
+						<div class="ticket-title">
+							<h4>${element.message}</h4>
+						</div>
+						<div class="ticket-info">
+							<div>${element.full_name}</div>
+						<div class="bullet"></div>
+						<div class="text-primary">${element.created_at}</div>
+						</div>
+					</a>`
+		});
+		$('#view-history-document').html(hist)
 	}
 </script>

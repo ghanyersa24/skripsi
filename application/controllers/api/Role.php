@@ -16,7 +16,7 @@ class Role extends CI_Controller
 			"bobot_komponen" => post('bobot_komponen', 'numeric'),
 		);
 
-		$do = DB_MODEL::insert($this->table, $data);
+		$do = DB_MASTER::insert($this->table, $data);
 		if (!$do->error) {
 			success("data berhasil ditambahkan", $do->data);
 		} else {
@@ -49,7 +49,7 @@ class Role extends CI_Controller
 			"id" => post('id', 'required'),
 		);
 
-		$do = DB_MODEL::update($this->table, $where, $data);
+		$do = DB_MASTER::update($this->table, $where, $data);
 		if (!$do->error)
 			success("data berhasil diubah", $do->data);
 		else

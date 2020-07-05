@@ -15,7 +15,7 @@ class Register extends CI_Controller
 		];
 
 		post('password_confirmation', 'same:password');
-		$do = DB_MODEL::insert('users', $data);
+		$do = DB_MASTER::insert('users', $data);
 		foreach ($this->input->post('access') as $value) {
 			$access[] = [
 				'users_id' => $do->data['id'],

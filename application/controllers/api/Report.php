@@ -75,9 +75,9 @@ class Report extends CI_Controller
 
 			$rekap[$i]['bobot'] = (int) $value->BOBOT_KOMPONEN;
 			if (isset($rekap[$i]['perolehan']))
-				$rekap[$i]['perolehan'] += ($value->TERVALIDASI / max($value->TOTAL, 1)) * 4;
+				$rekap[$i]['perolehan'] += (float) number_format(($value->TERVALIDASI / max($value->TOTAL, 1)) * 4, 2, '.', '');
 			else
-				$rekap[$i]['perolehan'] = ($value->TERVALIDASI / max($value->TOTAL, 1)) * 4;
+				$rekap[$i]['perolehan'] = (float) number_format(($value->TERVALIDASI / max($value->TOTAL, 1)) * 4, 2, '.', '');
 
 			if (isset($rekap[$i]['skorMax']))
 				$rekap[$i]['skorMax'] += $value->BOBOT * 4;
