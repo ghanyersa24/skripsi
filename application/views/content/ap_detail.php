@@ -293,6 +293,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					})
 					if (!req.error) {
 						statusDocument('diajukan')
+						$('#table').DataTable().ajax.reload()
 					}
 				}
 			})

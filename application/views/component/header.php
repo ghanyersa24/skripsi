@@ -27,7 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- <script src="<?= base_url(); ?>assets/modules/moment.min.js"></script> -->
 	<script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
 	<!-- <script src="<?= base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-	<script type="module" src="<?= base_url() . 'assets/js/viewer.min.js' ?>"></script>
+	<script src="<?php echo base_url(); ?>assets/modules/chart.min.js"></script>
 	<script src="<?= base_url() . 'assets/js/request.js' ?>"></script>
 	<script src="<?= base_url() . 'assets/js/akreditasi.js' ?>"></script>
 	<script>
