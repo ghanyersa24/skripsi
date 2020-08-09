@@ -15,7 +15,7 @@ class History extends CI_Controller
 		if (is_null($id))
 			$do = DB_MODEL::where($this->table, "type = 'pengajuan' OR type = 'create'");
 		else
-			$do = DB_MODEL::where($this->table, "type = 'pengajuan' OR type = 'create' AND reference = $id");
+			$do = DB_MODEL::where($this->table, "reference = '$id'");
 		if (!$do->error)
 			success("data " . $this->table . " berhasil ditemukan", $do->data);
 		else

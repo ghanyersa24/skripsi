@@ -5,6 +5,7 @@ class Register extends CI_Controller
 {
 	public function index()
 	{
+		post('password_confirmation', 'same:password');
 		$data = [
 			'full_name' => post('full_name', 'required'),
 			'address' => post('address'),
@@ -14,7 +15,6 @@ class Register extends CI_Controller
 			'password' => password_hash(post('password', 'required'), PASSWORD_DEFAULT, array('cost' => 10)),
 		];
 
-		post('password_confirmation', 'same:password');
 		$do = DB_MASTER::insert('users', $data);
 		foreach ($this->input->post('access') as $value) {
 			$access[] = [

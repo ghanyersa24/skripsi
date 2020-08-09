@@ -1,0 +1,17 @@
+{
+    "web": {
+        "client_id": "648334360521-e6g0sihvu1hk41urcc2a6v9e1r19581d.apps.googleusercontent.com",
+        "project_id": "skripsi-281419",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "gdpPbh0eNkLLzQSjWgzjPnCD",
+        "redirect_uris": [
+            "https://simda.myghan.com/api/document/create",
+            "http://localhost/skripsi/api/document/create"
+        ],
+        "javascript_origins": [
+            "https://simda.myghan.com"
+        ]
+    }
+}

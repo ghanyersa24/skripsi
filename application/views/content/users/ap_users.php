@@ -260,7 +260,7 @@
 		getRole()
 		if (statusUser !== 'penanggung jawab') {
 			$('#btn-add-tps, #btn-access').hide()
-			$('input, textarea, select, button').prop('disabled', true)
+			$('input, textarea, select, #btn-save').prop('disabled', true)
 		}
 		$('#table-access tbody').on('click', '.btn-view', function() {
 			let data = $(`#table-access`).DataTable().row($(this).parents('tr')).data()
@@ -314,6 +314,20 @@
 
 		$('#table').DataTable({
 			ajax: base_url + 'account/users/get',
+			dom: 'Bfrtip',
+			buttons: [{
+					extend: 'excelHtml5',
+					footer: true
+				},
+				{
+					extend: 'pdfHtml5',
+					footer: true
+				},
+				{
+					extend: 'print',
+					footer: true,
+				}
+			],
 			columns: [{
 					render: function(data, type, row, meta) {
 						return meta.row + meta.settings._iDisplayStart + 1;

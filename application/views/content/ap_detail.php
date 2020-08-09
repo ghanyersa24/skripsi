@@ -121,7 +121,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="input-group">
 									<div class="custom-file">
 										<input type="file" class="custom-file-input" id="view-upload" aria-describedby="btn-upload">
-										<label class="custom-file-label" for="view-upload">Cari file</label>
+										<label class="custom-file-label view-l" for="view-upload">Cari file</label>
 									</div>
 								</div>
 							</div>
@@ -152,6 +152,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<div class="d-block mt-4">
 										<span> <span class="h6">Sabar ya,</span> dokumen ini berstatus <div class="badge badge-warning">Revisi</div>. <br> <b>Note : </b> <span id="view-note"></span>.</span>
 										<a class="view-link" target="_blank" href="">lihat dokumen.</a>
+										<br>
+										<span class="click text-info" id="btn-pengajuan2">Ajukan Lagi Validasi Dokumen !</span>
 									</div>
 								</div>
 								<!-- <br> -->
@@ -211,6 +213,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		competency_id = `<?= $competency_id ?>`,
 		standar_id = `<?= $role_id ?>`
 	$(document).ready(function() {
+
+		$('#view-upload').change(function() {
+			let filename = document.getElementById('view-upload').files[0].name
+			$('label.custom-file-label').html(filename)
+		})
+		$('#add-upload').change(function() {
+			let filename = document.getElementById('add-upload').files[0].name
+			$('label.custom-file-label').html(filename)
+		})
+
 		$('#btn-add').click(async (e) => {
 			let formData = new FormData()
 			formData.append('gdrive', document.getElementById('add-upload').files[0])
@@ -236,6 +248,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						$('#add').modal('hide')
 						$('#table').DataTable().ajax.reload()
 						$('#form-add input').val('')
+						$('label.custom-file-label').html('Cari file')
 					} else if (res.error && res.message == 'silahkan melakukan autentikasi google drive')
 						konfirm('menggunggah file ke google drive perlu autentikasi google.').then((yes) => {
 							if (yes)
@@ -300,7 +313,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				$('#view-history-document').slideToggle('slow')
 				$('#btn-history').html(`<i class="far fa-times-circle" style="font-size: 2.5em;"></i>`)
 				showHistory = true
-				printHistory()
 			}
 		})
 
@@ -311,12 +323,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				note: $('#add-note').val(),
 				title: $('#view-title').val()
 			}
-			const req = requestPost(api + 'document/status', data)
-			if (!req.error) {
-				$('#add-note').val('')
-				statusDocument($('#add-status').val())
-				$('#table').DataTable().ajax.reload()
-			}
+			konfirm(`mengganti status dokumen menjadi ` + $('#add-status').val()).then((yes) => {
+				if (yes) {
+					const req = requestPost(api + 'document/status', data)
+					if (!req.error) {
+						$('#add-note').val('')
+						statusDocument($('#add-status').val())
+						$('#table').DataTable().ajax.reload()
+					}
+				}
+			})
 		})
 
 		$('#btn-hapus').click(function(e) {
@@ -335,7 +351,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			})
 		});
 
-		$('#btn-pengajuan').click(function(e) {
+		$('#btn-pengajuan, #btn-pengajuan2').click(function(e) {
 			konfirm('mengajukan dokumen ini untuk divalidasi.').then((yes) => {
 				if (yes) {
 					const req = requestPost(api + 'document/pengajuan', {
@@ -411,7 +427,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				$(`#view-${key}`).val(data[key])
 			}
 			$('#view-note').text(data.note)
+			$('label.view-l').html('<span class="text-success">data dokumen<span/>')
 			$('.view-link').attr('href', data.link)
+			printHistory(data.id)
 			statusDocument(data.status)
 			$('#view').modal('show')
 		})
@@ -442,7 +460,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			$('#form-view input').prop("disabled", true)
 			$('#tervalidasi').show()
 		} else if (status == 'revisi') {
-			$('#btn-save, #form-view input, #btn-hapus').prop('disabled', false)
+			$('#btn-save, #form-view input').prop('disabled', false)
 			$('#revisi').show()
 		} else {
 			$('#btn-save, #form-view input, #btn-hapus').prop('disabled', false)
@@ -451,9 +469,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	}
 
-	const printHistory = () => {
+
+	const printHistory = (id) => {
 		let hist = ""
-		const req = requestGet(api + 'history/get/' + $('#view-id').val())
+		const req = requestGet(api + 'history/get/' + id)
 		req.data.forEach(element => {
 			hist += `<a href="${base_url}/admin/akreditasi/${element.slug}" class="ticket-item ${element.type=='pengajuan'?'text-warning':'text-primary'}">
 						<div class="ticket-title">

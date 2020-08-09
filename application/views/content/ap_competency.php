@@ -152,13 +152,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					classText = 'text-warning'
 
 				div += `<div class="card col-sm-3  shadow-none ">
-							<div class="card-body shadow-sm rounded">
+							<div class="card-body shadow-sm rounded" >
 							<?php if ($this->session->status == 'penanggung jawab') { ?>
-								<div class="d-flex flex-wrap justify-content-end align-items-center mr-0">
-									<i class="fa fa-edit click edit" onclick="view('${print.COMPETENCY_ID}','${print.COMPETENCY}','${print.BOBOT}','${print.DETAILS}')"></i>
+								<div class="d-flex flex-wrap justify-content-end align-items-center mr-0" >
+									<i data-toggle="tooltip" title="Ubah data ${print.COMPETENCY}" class="fa fa-edit click edit" onclick="view('${print.COMPETENCY_ID}','${print.COMPETENCY}','${print.BOBOT}','${print.DETAILS}')"></i>
 								</div>
 							<?php } ?>
-                                <a href="<?= base_url() . 'admin/akreditasi/' . $slug ?>/${print.COMPETENCY}~${print.COMPETENCY_ID}" class="${classText} text-decoration-none">
+                                <a href="<?= base_url() . 'admin/akreditasi/' . $slug ?>/${print.COMPETENCY}~${print.COMPETENCY_ID}" class="${classText} text-decoration-none" data-toggle="tooltip" title="Daftar dokumen ${print.COMPETENCY}">
                                     <h5 class="card-title">${print.COMPETENCY}</h5>
                                     <hr>
                                     <p class="card-text">${print.DETAILS} (${infoCompetency} <span class="text-dark">${print.BOBOT} pt</span>).</p>

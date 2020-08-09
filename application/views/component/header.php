@@ -7,6 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <head>
 	<meta charset="UTF-8">
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+	<meta name="google-site-verification" content="xWBZiZPzBiBvDRZut67DLFwVhfhhNlizV7bHG2JVBik" />
 	<title><?= $title; ?> &mdash; SIMDA Apps</title>
 
 	<!-- Global CSS -->

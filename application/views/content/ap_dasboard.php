@@ -8,49 +8,47 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<h1><?= $title ?></h1>
 		</div>
 		<div class="row">
-			<div class="row">
-				<div class="col-md-8">
-					<div class="card">
-						<div class="card-body">
-							<div class="row container">
-								<h4 class="w-100">Peringkat <span id="peringkat"></h4>
-								<label>dengan jumlah <span id="point" class="text-warning"></span> <span class="text-warning">poin</span> akreditasi. </span></label>
-							</div>
-							<div class="table-responsive">
-								<table class="table table-striped w-100" id="table">
-									<thead>
-										<tr>
-											<th class="text-center" width="5%">
-												#
-											</th>
-											<th width="35%">Standar</th>
-											<th>Kompetensi</th>
-											<th>Bobot Komponen</th>
-											<th>Poin Maksimal</th>
-											<th>Perolehan</th>
-											<th>Nilai</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-body">
+						<div class="row container">
+							<h4 class="w-100">Peringkat <span id="peringkat"></h4>
+							<label>dengan jumlah <span id="point" class="text-warning"></span> <span class="text-warning">poin</span> akreditasi. </span></label>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-striped w-100" id="table">
+								<thead>
+									<tr>
+										<th class="text-center" width="5%">
+											#
+										</th>
+										<th width="35%">Standar</th>
+										<th>Kompetensi</th>
+										<th>Bobot Komponen</th>
+										<th>Poin Maksimal</th>
+										<th>Perolehan</th>
+										<th>Nilai</th>
+									</tr>
+								</thead>
+							</table>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
-					<div class="card">
-						<div class="card-header">
-							<div class="card-description h5">Riwayat</div>
-						</div>
-						<div class="card-body p-0">
-							<div class="tickets-list overflow-auto vh-100" id="history">
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-description h5">Riwayat</div>
+					</div>
+					<div class="card-body p-0">
+						<div class="tickets-list overflow-auto vh-100" id="history">
 
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row" id="chart">
-			</div>
+		</div>
+		<div class="row" id="chart">
 		</div>
 	</section>
 </div>
